@@ -1,0 +1,217 @@
+//Luo waypointin
+Function AddWaypoint(x,y)
+	ClearArray OFF
+	
+	gWaypointAmount = gWaypointAmount + 1
+	ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+	
+	gWaypoints(gWaypointAmount,WP_X) = x
+	gWaypoints(gWaypointAmount,WP_Y) = y
+EndFunction
+
+//Asettaa waypointille k‰‰ntymissuunnan
+Function SetWaypointDir(waypoint)
+	prevWaypoint = Max(1,waypoint - 1)
+	nextWaypoint = Min(gWaypointAmount,waypoint + 1)
+		
+	currentX = gWaypoints(waypoint,WP_X)
+	currentY = gWaypoints(waypoint,WP_Y)
+		
+	nextX = gWaypoints(nextWaypoint,WP_X)
+	nextY = gWaypoints(nextWaypoint,WP_Y)
+		
+	prevX = gWaypoints(prevWaypoint,WP_X)
+	prevY = gWaypoints(prevWaypoint,WP_Y)
+	
+	If waypoint = prevWaypoint
+		If currentX < nextX
+			gWaypoints(waypoint,WP_DIR) = DIR_RIGHT
+		ElseIf currentX > nextX
+			gWaypoints(waypoint,WP_DIR) = DIR_LEFT
+		EndIf
+		
+		If currentY < nextY
+			gWaypoints(waypoint,WP_DIR) = DIR_DOWN
+		ElseIf currentY > nextY
+			gWaypoints(waypoint,WP_DIR) = DIR_UP
+		EndIf
+	EndIf
+	
+	If currentX = prevX
+		If currentX < nextX
+			gWaypoints(waypoint,WP_DIR) = DIR_RIGHT
+		ElseIf currentX > nextX
+			gWaypoints(waypoint,WP_DIR) = DIR_LEFT
+		EndIf
+	ElseIf currentY = prevY
+		If currentY < nextY
+			gWaypoints(waypoint,WP_DIR) = DIR_DOWN
+		ElseIf currentY > nextY
+			gWaypoints(waypoint,WP_DIR) = DIR_UP
+		EndIf
+	EndIf
+EndFunction
+
+//Poistaa waypointin
+Function DeleteWaypoint(waypoint)
+	ClearArray OFF
+	
+	If waypoint = gWaypointAmount
+		gWaypointAmount = gWaypointAmount - 1
+		ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+	EndIf
+EndFunction
+
+//Apufunktio kulmapalojen piirt‰miseen
+Function DrawPathCorner(x,y,corner)
+	Select corner
+		Case 1 //Up-Left
+			Circle x,y,CORNER_RADIUS,1
+			Box x + CORNER_RADIUS / 2,y + CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x + CORNER_RADIUS / 2,y,GRID_SIZE - CORNER_RADIUS / 2,CORNER_RADIUS / 2
+			Box x,y + CORNER_RADIUS / 2,CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+		Case 2 //Up-Right
+			Circle x + GRID_SIZE - CORNER_RADIUS,y,CORNER_RADIUS,1
+			Box x,y + CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x,y,GRID_SIZE - CORNER_RADIUS / 2,CORNER_RADIUS / 2
+			Box x + GRID_SIZE - CORNER_RADIUS / 2,y + CORNER_RADIUS / 2,CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+		Case 3 //Down-Left
+			Circle x,y + GRID_SIZE - CORNER_RADIUS,CORNER_RADIUS,1
+			Box x + CORNER_RADIUS / 2,y,GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x,y,CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x + CORNER_RADIUS / 2,y + GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2,CORNER_RADIUS / 2
+		Case 4 //Down-Right
+			Circle x + GRID_SIZE - CORNER_RADIUS,y + GRID_SIZE - CORNER_RADIUS,CORNER_RADIUS,1
+			Box x,y,GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x + GRID_SIZE - CORNER_RADIUS / 2,y,CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2
+			Box x,y + GRID_SIZE - CORNER_RADIUS / 2,GRID_SIZE - CORNER_RADIUS / 2,CORNER_RADIUS / 2
+	EndSelect
+EndFunction
+
+//Piirt‰‰ reitin
+Function DrawPath()
+	For currentWaypoint = 1 To gWaypointAmount
+		prevWaypoint = Max(1,currentWaypoint - 1)
+		nextWaypoint = Min(gWaypointAmount,currentWaypoint + 1)
+		
+		currentX = gWaypoints(currentWaypoint,WP_X)
+		currentY = gWaypoints(currentWaypoint,WP_Y)
+		currentDirection = gWaypoints(currentWaypoint,WP_DIR)
+		
+		nextX = gWaypoints(nextWaypoint,WP_X)
+		nextY = gWaypoints(nextWaypoint,WP_Y)
+		
+		prevX = gWaypoints(prevWaypoint,WP_X)
+		prevY = gWaypoints(prevWaypoint,WP_Y)
+		
+		//Waypoint-kohtien piirt‰minen
+		Color cbDark
+		If currentWaypoint = 1 Or currentWaypoint = gWaypointAmount
+			Box currentX * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
+		Else
+			//Valitaan oikeanlainen kulmapala
+			If currentX = prevX
+				If currentY < prevY
+					If currentX < nextX
+						tmpCorner = CORNER_UL
+					ElseIf currentX > nextX
+						tmpCorner = CORNER_UR
+					EndIf
+				ElseIf currentY > prevY
+					If currentX < nextX
+						tmpCorner = CORNER_DL
+					ElseIf currentX > nextX
+						tmpCorner = CORNER_DR
+					EndIf
+				EndIf
+			ElseIf currentY = prevY
+				If currentX < prevX
+					If currentY < nextY
+						tmpCorner = CORNER_UL
+					ElseIf currentY > nextY
+						tmpCorner = CORNER_DL
+					EndIf
+				ElseIf currentX > prevX
+					If currentY < nextY
+						tmpCorner = CORNER_UR
+					ElseIf currentY > nextY
+						tmpCorner = CORNER_DR
+					EndIf
+				EndIf
+			EndIf
+			
+			DrawPathCorner(currentX * GRID_SIZE,currentY * GRID_SIZE,tmpCorner)
+		EndIf
+		
+		//Piirret‰‰n reitti waypointtien v‰liin
+		If currentDirection = DIR_UP
+			startPoint = currentY - 1
+			endPoint = nextY + 1
+			
+			For i = startPoint To endPoint Step -1
+				Box currentX * GRID_SIZE,i * GRID_SIZE,GRID_SIZE,GRID_SIZE
+			Next i
+		ElseIf currentDirection = DIR_DOWN
+			startPoint = currentY + 1
+			endPoint = nextY - 1
+			
+			For i = startPoint To endPoint
+				Box currentX * GRID_SIZE,i * GRID_SIZE,GRID_SIZE,GRID_SIZE
+			Next i
+		ElseIf currentDirection = DIR_LEFT
+			startPoint = currentX - 1
+			endPoint = nextX + 1
+			
+			For i = startPoint To endPoint Step -1
+				Box i * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
+			Next i
+		ElseIf currentDirection = DIR_RIGHT
+			startPoint = currentX + 1
+			endPoint = nextX - 1
+			
+			For i = startPoint To endPoint
+				Box i * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
+			Next i
+		EndIf
+	Next currentWaypoint
+EndFunction
+
+//Tyhjent‰‰ nykyisen reitin
+Function ClearPath()
+	ClearArray ON
+	
+	gWaypointAmount = 0
+	ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES)
+EndFunction
+
+//Tallentaa reitin tiedostoon
+Function SavePath(number)
+	f = OpenToWrite("Data/" + number + ".lvl")
+		WriteByte f,gWaypointAmount
+		
+		For i = 1 To gWaypointAmount
+			WriteByte f,gWaypoints(i,WP_X)
+			WriteByte f,gWaypoints(i,WP_Y)
+			WriteByte f,gWaypoints(i,WP_DIR)
+		Next i
+	CloseFile f
+EndFunction
+
+//Lataa reitin tiedostosta
+Function LoadPath(number)
+	ClearArray ON
+	
+	f = OpenToRead("Data/" + number + ".lvl")
+		gWaypointAmount = ReadByte(f)
+		
+		ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES)
+		
+		For i = 1 To gWaypointAmount
+			gWaypoints(i,WP_X) = ReadByte(f)
+			gWaypoints(i,WP_Y) = ReadByte(f)
+			gWaypoints(i,WP_DIR) = ReadByte(f)
+		Next i
+	CloseFile f
+EndFunction
+	
+	

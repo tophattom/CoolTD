@@ -1,0 +1,74 @@
+Type ENEMY
+	Field x
+	Field y
+	
+	Field speed As Float
+	
+	Field hp
+	Field maxHp
+	
+	Field dir As Byte
+	
+	Field nextWaypoint
+	
+	Field id
+EndType
+
+Type TOWER
+	Field x
+	Field y
+	
+	Field cannonAng As Float
+	
+	Field damage As Float
+	Field range
+	Field shootSpeed
+	
+	Field lastShot
+	
+	Field targetId
+	
+	Field id
+EndType
+
+//Ruudukon vakiot
+Const GRID_SIZE = 30
+Const GRID_W = 20
+Const GRID_H = 15
+
+//Kulmien pyöreys
+Const CORNER_RADIUS = 20
+
+//Vakiot suunnille
+Const DIR_UP = 1
+Const DIR_DOWN = 2
+Const DIR_LEFT = 3
+Const DIR_RIGHT = 4
+
+//Vakiot tilejen kulmille
+Const CORNER_UL = 1
+Const CORNER_UR = 2
+Const CORNER_DL = 3
+Const CORNER_DR = 4
+
+//Vakiot waypointtien ominaisuuksille
+Const WP_X = 0
+Const WP_Y = 1
+Const WP_DIR = 2
+//Waypointtien ominaisuuksien kokonaismäärä
+Const WP_PROPERTIES = 3
+
+
+
+Global gScreenW,gScreenH
+	gScreenW = GRID_SIZE * GRID_W
+	gScreenH = GRID_SIZE * GRID_H
+	
+Global gCurrentTower	//Valittu torni tai asetettava torni
+Global gPlaceTower		//Ollaanko tornia asettamassa
+Global gWaypointAmount	//Waypointtien määrä
+	gWaypointAmount = 0
+
+
+//Waypointit
+Dim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
