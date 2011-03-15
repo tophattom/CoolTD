@@ -1,9 +1,10 @@
 Function Editor()
 	Repeat
+		SetWindow "FPS: " + FPS()
 		cX = RoundDown(MouseX() / GRID_SIZE)
 		cY = RoundDown(MouseY() / GRID_SIZE)
 		
-		If MouseHit(1)
+		If MouseHit(1) And CheckTile(cX,cY)
 			If gWaypointAmount > 1
 				tmpX = gWaypoints(gWaypointAmount,WP_X)
 				tmpY = gWaypoints(gWaypointAmount,WP_Y)

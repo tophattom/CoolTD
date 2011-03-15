@@ -176,6 +176,64 @@ Function DrawPath()
 	Next currentWaypoint
 EndFunction
 
+//Tarkistaa onko tile tyhj‰
+Function CheckTile(x,y)
+	For currentWaypoint = 1 To gWaypointAmount
+		nextWaypoint = Min(gWaypointAmount,currentWaypoint + 1)
+		
+		currentX = gWaypoints(currentWaypoint,WP_X)
+		currentY = gWaypoints(currentWaypoint,WP_Y)
+		currentDirection = gWaypoints(currentWaypoint,WP_DIR)
+		
+		nextX = gWaypoints(nextWaypoint,WP_X)
+		nextY = gWaypoints(nextWaypoint,WP_Y)
+		
+		If x = currentX And y = currentY
+			Return False
+		Else
+			If currentDirection = DIR_UP
+				startPoint = currentY - 1
+				endPoint = nextY + 1
+				
+				For i = startPoint To endPoint Step -1
+					If x = currentX And y = i
+						Return False
+					EndIf
+				Next i
+			ElseIf currentDirection = DIR_DOWN
+				startPoint = currentY + 1
+				endPoint = nextY - 1
+				
+				For i = startPoint To endPoint
+					If x = currentX And y = i
+						Return False
+					EndIf
+				Next i
+			ElseIf currentDirection = DIR_LEFT
+				startPoint = currentX - 1
+				endPoint = nextX + 1
+				
+				For i = startPoint To endPoint Step -1
+					If x = i And y = currentY
+						Return False
+					EndIf
+				Next i
+			ElseIf currentDirection = DIR_RIGHT
+				startPoint = currentX + 1
+				endPoint = nextX - 1
+				
+				For i = startPoint To endPoint
+					If x = i And y = currentY
+						Return False
+					EndIf
+				Next i
+			EndIf
+		EndIf
+	Next currentWaypoint
+	
+	Return True
+EndFunction
+			
 //Tyhjent‰‰ nykyisen reitin
 Function ClearPath()
 	ClearArray ON
