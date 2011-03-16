@@ -1,8 +1,11 @@
 Include "util.cb"
 Include "map.cb"
 Include "tower.cb"
+Include "enemy.cb"
 Include "editor.cb"
 
 SCREEN gScreenW,gScreenH
+
+LoadEnemyData("data/enemies.ini")
 
 Editor()

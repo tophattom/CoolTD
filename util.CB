@@ -1,3 +1,19 @@
+//Vihollisten tyypit
+Type ENEMYTYPE
+	Field maxHp
+	Field speed
+	
+	Field difficulty
+	
+	Field reward
+	
+	Field style
+	Field size
+	Field clr
+	
+	Field id
+EndType
+
 //Viholliskokoelma
 Type ENEMY
 	Field x
@@ -11,6 +27,12 @@ Type ENEMY
 	Field dir As Byte
 	
 	Field nextWaypoint
+	
+	Field reward
+	
+	Field style
+	Field size
+	Field clr
 	
 	Field id
 EndType
@@ -83,6 +105,12 @@ Const WP_DIR = 2
 //Waypointtien ominaisuuksien kokonaism‰‰r‰
 Const WP_PROPERTIES = 3
 
+//Vihollistyylit
+Const STYLE_CIRCLE = 1
+Const STYLE_SQUARE = 2
+Const STYLE_PLUS = 3
+Const STYLE_X = 4
+
 
 Global gScreenW,gScreenH
 	gScreenW = GRID_SIZE * GRID_W
@@ -99,6 +127,7 @@ Global gMoney
 	gMoney = 99999
 
 Global gLoopTime
+Global gTest
 
 
 //Waypointit

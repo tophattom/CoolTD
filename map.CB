@@ -245,7 +245,7 @@ Function ClearPath()
 	ClearArray ON
 	
 	gWaypointAmount = 0
-	ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES)
+	ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
 EndFunction
 
 //Tallentaa reitin tiedostoon
@@ -268,7 +268,7 @@ Function LoadPath(number)
 	f = OpenToRead("Data/" + number + ".lvl")
 		gWaypointAmount = ReadByte(f)
 		
-		ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES)
+		ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
 		
 		For i = 1 To gWaypointAmount
 			gWaypoints(i,WP_X) = ReadByte(f)

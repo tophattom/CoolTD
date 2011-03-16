@@ -1,0 +1,128 @@
+Function LoadEnemyData(file$)
+	If FileExists(file$)
+		f = OpenToRead(file$)
+			//K‰yd‰‰n koko tiedosto l‰pi
+			While Not EOF(f)
+				//Luetaan 'komento'
+				command$ = Lower(Trim(ReadLine(f)))
+				
+				//Jos oli oikea komento tornin luomiseen
+				If command$ = "[enemy]"
+					nType.ENEMYTYPE = New(ENEMYTYPE)
+					
+					Repeat
+						l$ = ReadLine(f)
+						attr$ = Lower(Trim(GetWord(l$,1,"=")))
+						value = Int(GetWord(l$,2,"="))
+						
+						Select attr$
+							case "maxhp"
+								nType\maxHp = value
+							Case "speed"
+								nType\speed = value
+							Case "reward"
+								nType\reward = value
+							Case "difficulty"
+								nType\difficulty = value
+							Case "style"
+								val$ = Lower(Trim(GetWord(l$,2,"=")))
+								
+								Select val$
+									Case "rect"
+										nType\style = STYLE_RECT
+									Case "plus"
+										nType\style = STYLE_PLUS
+									Case "x"
+										nType\style = STYLE_X
+									Case "circ"
+										nType\style = STYLE_CIRCLE
+								EndSelect
+							Case "size"
+								nType\size = value
+							Case "clr"
+								nType\clr = MakeMEMBlock(3)
+								
+								values$ = GetWord(l$,2,"=")
+								
+								PokeByte nType\clr,0,Int(GetWord(values$,1,","))
+								PokeByte nType\clr,1,Int(GetWord(values$,2,","))
+								PokeByte nType\clr,2,Int(GetWord(values$,3,","))
+						EndSelect
+					Until Lower(l$) = "[e"+"nd]"
+					
+					nType\id = ConvertToInteger(nType)
+					
+					gTest = nType\id
+				EndIf
+			Wend
+		CloseFile f
+	Else
+		MakeError "File " + file$ + " n"+"ot found!"
+		Return False
+	EndIf
+EndFunction
+
+//Luo uuden vihollisen ensimm‰iselle waypointille
+Function CreateEnemy(enemyT)
+	eType.ENEMYTYPE = ConvertToType(enemyT)
+	
+	nEnemy.ENEMY = New(ENEMY)
+		nEnemy\x = gWaypoints(1,WP_X) * GRID_SIZE + GRID_SIZE / 2
+		nEnemy\y = gWaypoints(1,WP_Y) * GRID_SIZE + GRID_SIZE / 2
+		
+		nEnemy\dir = gWaypoints(1,WP_DIR)
+		
+		nEnemy\nextWaypoint = 2
+		
+		nEnemy\hp = eType\maxHp
+		nEnemy\speed = eType\speed
+		nEnemy\reward = eType\reward
+		
+		nEnemy\style = eType\style
+		nEnemy\size = eType\size
+		nEnemy\clr = eType\clr
+		
+		nEnemy\id = ConvertToInteger(nEnemy)
+EndFunction
+
+Function UpdateEnemies()
+	For iEnemy.ENEMY = Each ENEMY
+		If iEnemy\dir = DIR_UP
+			xPlus = 0
+			yPlus = -iEnemy\speed
+		ElseIf iEnemy\dir = DIR_DOWN
+			xPlus = 0
+			yPlus = iEnemy\speed
+		ElseIf iEnemy\dir = DIR_LEFT
+			xPlus = -iEnemy\speed
+			yPlus = 0
+		ElseIf iEnemy\dir = DIR_RIGHT
+			xPlus = iEnemy\speed
+			yPlus = 0
+		EndIf
+		
+		iEnemy\x = iEnemy\x + xPlus' * (gLoopTime / 1000)
+		iEnemy\y = iEnemy\y + yPlus' * (gLoopTime / 1000)
+		
+		tmpX = gWaypoints(iEnemy\nextWaypoint,WP_X) * GRID_SIZE + GRID_SIZE / 2
+		tmpY = gWaypoints(iEnemy\nextWaypoint,WP_Y) * GRID_SIZE + GRID_SIZE / 2
+		
+		If Distance(iEnemy\x,iEnemy\y,tmpX,tmpY) <= 3
+			iEnemy\x = tmpX
+			iEnemy\y = tmpY
+			
+			iEnemy\dir = gWaypoints(iEnemy\nextWaypoint,WP_DIR)
+			
+			iEnemy\nextWaypoint = iEnemy\nextWaypoint + 1
+		EndIf
+	Next iEnemy
+EndFunction
+
+Function DrawEnemies()
+	For iEnemy.ENEMY = Each ENEMY
+		Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+		If iEnemy\style = STYLE_CIRCLE
+			Circle iEnemy\x - (iEnemy\size / 2),iEnemy\y - (iEnemy\size / 2),iEnemy\size,1
+		EndIf
+	Next iEnemy
+EndFunction

@@ -1,6 +1,4 @@
 Function LoadTowerData(file$)	
-	ClearArray OFF
-	
 	If FileExists(file$)
 		f = OpenToRead(file$)
 			//K‰yd‰‰n koko tiedosto l‰pi
