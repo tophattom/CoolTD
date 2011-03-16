@@ -1,0 +1,122 @@
+Function LoadTowerData(file$)	
+	ClearArray OFF
+	
+	If FileExists(file$)
+		f = OpenToRead(file$)
+			//K‰yd‰‰n koko tiedosto l‰pi
+			While Not EOF(f)
+				//Luetaan 'komento'
+				command$ = Lower(Trim(ReadLine(f)))
+				
+				//Jos oli oikea komento tornin luomiseen
+				If command$ = "[tower]"
+					nType.TOWERTYPE = New(TOWERTYPE)
+					
+					Repeat
+						l$ = ReadLine(f)
+						attr$ = Lower(Trim(GetWord(l$,1,"=")))
+						value = Int(GetWord(l$,2,"="))
+						
+						Select attr$
+							Case "name"
+								nType\name = Trim(GetWord(l$,2,"="))
+							Case "damage"
+								nType\damage = value
+							Case "range"
+								nType\range = value
+							Case "speed"
+								nType\speed = value
+							Case "price"
+								nType\price = value
+							Case "clr"
+								nType\clr = MakeMEMBlock(3)
+								
+								values$ = GetWord(l$,2,"=")
+								
+								PokeByte nType\clr,0,Int(GetWord(values$,1,","))
+								PokeByte nType\clr,1,Int(GetWord(values$,2,","))
+								PokeByte nType\clr,2,Int(GetWord(values$,3,","))
+						EndSelect
+					Until Lower(l$) = "[e"+"nd]"
+					
+					nType\id = ConvertToInteger(nType)
+				EndIf
+			Wend
+		CloseFile f
+	Else
+		MakeError "File " + file$ + " n"+"ot found!"
+		Return False
+	EndIf
+EndFunction
+
+//Palauttaa tornityypin id:n nimen perusteella
+Function GetTypeId(name$)
+	For iType.TOWERTYPE = Each TOWERTYPE
+		If iType\name = name
+			Return iType\id
+		EndIf
+	Next iType
+	Return False
+EndFunction
+
+//Luo uuden tornin
+Function CreateTower(x,y,typeId)
+	tType.TOWERTYPE = ConvertToType(typeId)
+	
+	If gMoney > tType\price
+		gMoney = gMoney - tType\price
+		
+		nTower.TOWER = New(TOWER)
+			nTower\x = x
+			nTower\y = y
+			
+			nTower\damage = tType\damage
+			nTower\range = tType\range
+			nTower\speed = tType\speed
+			
+			nTower\clr = tType\clr
+			
+			nTower\id = ConvertToInteger(nTower)
+	EndIf
+EndFunction
+
+//Palauttaa tietyss‰ kohdassa olevan tornin id:n
+Function GetTowerId(x,y)
+	For iTower.TOWER = Each TOWER
+		If iTower\x = x And iTower\y = y
+			Return iTower\id
+		EndIf
+	Next iTower
+	Return False
+EndFunction
+
+//Piirt‰‰ kaikki tornit
+Function DrawTowers()
+	For iTower.TOWER = Each TOWER
+		tmpX = iTower\x * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
+		tmpY = iTower\y * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
+		
+		centerX = tmpX + TOWER_SIZE / 2
+		centerY = tmpY + TOWER_SIZE / 2
+		
+		Color PeekByte(iTower\clr,0),PeekByte(iTower\clr,1),PeekByte(iTower\clr,2)
+		Box tmpX,tmpY,TOWER_SIZE,TOWER_SIZE,0
+		Box tmpX + 3,tmpY + 3,TOWER_SIZE - 6,TOWER_SIZE - 6,1
+		
+		//Piirret‰‰n kantama jos torni ON valittu
+		If gSelectedTower = iTower\id
+			Circle centerX - iTower\range,centerY - iTower\range,iTower\range * 2,0
+		EndIf
+	Next iTower
+EndFunction
+
+Function PrintTowerInfo()
+	For iType.TOWERTYPE = Each TOWERTYPE
+		Color PeekByte(iType\clr,0),PeekByte(iType\clr,1),PeekByte(iType\clr,2)
+		Print "Name: " + iType\name
+		Print "Price: " + iType\price
+		Print "Damage: " + iType\damage
+		Print "Range: " + iType\range
+		Print "Speed:" + iType\speed
+	Next iType
+EndFunction

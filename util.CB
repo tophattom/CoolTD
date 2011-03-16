@@ -15,6 +15,21 @@ Type ENEMY
 	Field id
 EndType
 
+//Tornien tyypit
+Type TOWERTYPE
+	Field name$
+	
+	Field damage
+	Field range
+	Field speed
+	
+	Field price
+	
+	Field clr
+	
+	Field id
+EndType
+
 //Tornikokoelma
 Type TOWER
 	Field x
@@ -22,13 +37,17 @@ Type TOWER
 	
 	Field cannonAng As Float
 	
-	Field damage As Float
+	Field damage
 	Field range
-	Field shootSpeed
+	Field speed
 	
 	Field lastShot
 	
 	Field targetId
+	
+	Field level
+	
+	Field clr
 	
 	Field id
 EndType
@@ -54,13 +73,15 @@ Const CORNER_UR = 2
 Const CORNER_DL = 3
 Const CORNER_DR = 4
 
+//Tornien koko
+Const TOWER_SIZE = 14
+
 //Vakiot waypointtien ominaisuuksille
 Const WP_X = 0
 Const WP_Y = 1
 Const WP_DIR = 2
 //Waypointtien ominaisuuksien kokonaism‰‰r‰
 Const WP_PROPERTIES = 3
-
 
 
 Global gScreenW,gScreenH
@@ -71,6 +92,13 @@ Global gCurrentTower	//Valittu torni tai asetettava torni
 Global gPlaceTower		//Ollaanko tornia asettamassa
 Global gWaypointAmount	//Waypointtien m‰‰r‰
 	gWaypointAmount = 0
+	
+Global gTowerTypeAmount
+
+Global gMoney
+	gMoney = 99999
+
+Global gLoopTime
 
 
 //Waypointit

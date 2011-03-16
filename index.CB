@@ -1,5 +1,6 @@
 Include "util.cb"
 Include "map.cb"
+Include "tower.cb"
 Include "editor.cb"
 
 SCREEN gScreenW,gScreenH

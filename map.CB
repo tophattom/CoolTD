@@ -178,6 +178,12 @@ EndFunction
 
 //Tarkistaa onko tile tyhjä
 Function CheckTile(x,y)
+	//Tarkistetaan onko kohdassa tornia
+	If GetTowerId(x,y) <> 0
+		Return False
+	EndIf
+	
+	//Tarkistetaan onko kohdassa reittiä
 	For currentWaypoint = 1 To gWaypointAmount
 		nextWaypoint = Min(gWaypointAmount,currentWaypoint + 1)
 		

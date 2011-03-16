@@ -29,7 +29,7 @@ Function Editor()
 			LoadPath(1)
 		ElseIf KeyHit(cbKeyC)
 			ClearPath()
-		endif
+		EndIf
 		
 		DrawGrid()
 		DrawPath()
@@ -42,7 +42,7 @@ Function Editor()
 EndFunction
 
 Function DrawGrid()
-	Color 30,30,30
+	Color 20,20,20
 	For x = 0 To gScreenW Step GRID_SIZE
 		For y = 0 To gScreenH Step GRID_SIZE
 			Line x,0,x,gScreenH
