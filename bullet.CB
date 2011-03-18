@@ -1,0 +1,46 @@
+//Luo uuden ammuksen
+Function CreateBullet(x,y,ang,speed,damage,clr)
+	nBullet.BULLET = New(BULLET)
+		nBullet\x = x
+		nBullet\y = y
+		
+		nBullet\ang = ang
+		nBullet\speed = speed
+		
+		nBullet\damage = damage
+		
+		nBullet\clr = clr
+EndFunction
+
+//P‰ivitt‰‰ ammukset
+Function UpdateBullets()
+	For iBullet.BULLET = Each BULLET
+		iBullet\x = iBullet\x + Cos(iBullet\ang) * iBullet\speed' * (gLoopTime / 1000)
+		iBullet\y = iBullet\y - Sin(iBullet\ang) * iBullet\speed' * (gLoopTime / 1000)
+		
+		If iBullet\x < 0 Or iBullet\x > gScreenW Or iBullet\y < 0 Or iBullet\y > gScreenH
+			Delete iBullet
+		Else
+			For iEnemy.ENEMY = Each ENEMY
+				If Distance(iBullet\x,iBullet\y,iEnemy\x,iEnemy\y) <= iEnemy\size
+					iEnemy\hp = iEnemy\hp - iBullet\damage
+					
+					If iEnemy\hp <= 0
+						Delete iEnemy
+					EndIf
+					
+					Delete iBullet
+					Exit
+				EndIf
+			Next iEnemy
+		EndIf
+	Next iBullet
+EndFunction
+
+//Piirt‰‰ ammukset
+Function DrawBullets()
+	For iBullet.BULLET = Each BULLET
+		Color PeekByte(iBullet\clr,0),PeekByte(iBullet\clr,1),PeekByte(iBullet\clr,2)
+		Circle iBullet\x - 1,iBullet\y - 1,2,1
+	Next iBullet
+EndFunction

@@ -2,10 +2,15 @@ Include "util.cb"
 Include "map.cb"
 Include "tower.cb"
 Include "enemy.cb"
+Include "bullet.cb"
 Include "editor.cb"
 
 SCREEN gScreenW,gScreenH
 
+LoadTowerData("data/towers.ini")
 LoadEnemyData("data/enemies.ini")
+
+PrintTowerInfo()
+WaitKey
 
 Editor()

@@ -30,7 +30,7 @@ Function LoadEnemyData(file$)
 								Select val$
 									Case "rect"
 										nType\style = STYLE_RECT
-									Case "plus"
+									Case "+"
 										nType\style = STYLE_PLUS
 									Case "x"
 										nType\style = STYLE_X
@@ -85,6 +85,17 @@ Function CreateEnemy(enemyT)
 		nEnemy\id = ConvertToInteger(nEnemy)
 EndFunction
 
+//Kertoo onko kyseinen vihollinen viel‰ olemassa
+Function IsAlive(enemyId)
+	For iEnemy.ENEMY = Each ENEMY
+		If iEnemy\id = enemyId
+			Return True
+		EndIf
+	Next iEnemy
+	Return False
+EndFunction
+
+//P‰ivitt‰‰ viholliset
 Function UpdateEnemies()
 	For iEnemy.ENEMY = Each ENEMY
 		If iEnemy\dir = DIR_UP
@@ -108,21 +119,45 @@ Function UpdateEnemies()
 		tmpY = gWaypoints(iEnemy\nextWaypoint,WP_Y) * GRID_SIZE + GRID_SIZE / 2
 		
 		If Distance(iEnemy\x,iEnemy\y,tmpX,tmpY) <= 3
-			iEnemy\x = tmpX
-			iEnemy\y = tmpY
-			
-			iEnemy\dir = gWaypoints(iEnemy\nextWaypoint,WP_DIR)
-			
-			iEnemy\nextWaypoint = iEnemy\nextWaypoint + 1
+			If iEnemy\nextWaypoint = gWaypointAmount
+				Delete iEnemy
+			Else
+				iEnemy\x = tmpX
+				iEnemy\y = tmpY
+				
+				iEnemy\dir = gWaypoints(iEnemy\nextWaypoint,WP_DIR)
+				
+				iEnemy\nextWaypoint = iEnemy\nextWaypoint + 1
+			EndIf
 		EndIf
 	Next iEnemy
 EndFunction
 
+//Piirt‰‰ viholliset
 Function DrawEnemies()
 	For iEnemy.ENEMY = Each ENEMY
+		tmpX = iEnemy\x - (iEnemy\size / 2)
+		tmpY = iEnemy\y - (iEnemy\size / 2)
+	
 		Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
 		If iEnemy\style = STYLE_CIRCLE
-			Circle iEnemy\x - (iEnemy\size / 2),iEnemy\y - (iEnemy\size / 2),iEnemy\size,1
+			Circle tmpX,tmpY,iEnemy\size,1
+		ElseIf iEnemy\style = STYLE_RECT
+			Box tmpX,tmpY,iEnemy\size,iEnemy\size,1
+		ElseIf iEnemy\style = STYLE_X
+			tmpSize = iEnemy\size / 5
+			
+			For i = 0 To 4
+				Box tmpX + i * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
+				Box (tmpX + (iEnemy\size - tmpSize)) - i * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
+			Next i
+		ElseIf iEnemy\style = STYLE_PLUS
+			tmpSize = iEnemy\size / 5
+			
+			For i = 0 To 4
+				Box tmpX + 2 * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
+				Box tmpX + i * tmpSize,tmpY + 2 * tmpSize,tmpSize,tmpSize,1
+			Next i
 		EndIf
 	Next iEnemy
 EndFunction

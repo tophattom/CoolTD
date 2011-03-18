@@ -43,7 +43,8 @@ Type TOWERTYPE
 	
 	Field damage
 	Field range
-	Field speed
+	Field sSpeed
+	Field bSpeed
 	
 	Field price
 	
@@ -61,7 +62,8 @@ Type TOWER
 	
 	Field damage
 	Field range
-	Field speed
+	Field sSpeed
+	Field bSpeed
 	
 	Field lastShot
 	
@@ -72,6 +74,20 @@ Type TOWER
 	Field clr
 	
 	Field id
+EndType
+
+//Ammuskokoelma
+Type BULLET
+	Field x
+	Field y
+	
+	Field ang
+	
+	Field speed
+	
+	Field damage
+	
+	Field clr
 EndType
 
 

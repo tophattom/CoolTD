@@ -29,10 +29,23 @@ Function Editor()
 			LoadPath(1)
 		ElseIf KeyHit(cbKeyC)
 			ClearPath()
+		ElseIf KeyHit(cbKeyE)
+			CreateEnemy(gTest)
+		ElseIf KeyHit(cbKeyT)
+			CreateTower(cX,cY,GetTypeId("Basic"))
 		EndIf
 		
 		DrawGrid()
 		DrawPath()
+		
+		UpdateEnemies()
+		DrawEnemies()
+		
+		UpdateTowers()
+		DrawTowers()
+		
+		UpdateBullets()
+		DrawBullets()
 		
 		Color cbRed
 		Box cX * GRID_SIZE,cY * GRID_SIZE,GRID_SIZE,GRID_SIZE,0

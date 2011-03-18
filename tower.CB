@@ -22,8 +22,10 @@ Function LoadTowerData(file$)
 								nType\damage = value
 							Case "range"
 								nType\range = value
-							Case "speed"
-								nType\speed = value
+							Case "sspeed"
+								nType\sSpeed = value
+							Case "bspeed"
+								nType\bSpeed = value
 							Case "price"
 								nType\price = value
 							Case "clr"
@@ -70,7 +72,8 @@ Function CreateTower(x,y,typeId)
 			
 			nTower\damage = tType\damage
 			nTower\range = tType\range
-			nTower\speed = tType\speed
+			nTower\sSpeed = tType\sSpeed
+			nTower\bSpeed = tType\bSpeed
 			
 			nTower\clr = tType\clr
 			
@@ -86,6 +89,40 @@ Function GetTowerId(x,y)
 		EndIf
 	Next iTower
 	Return False
+EndFunction
+
+//P‰ivitt‰‰ tornien logiikan
+Function UpdateTowers()
+	For iTower.TOWER = Each TOWER
+		tmpX = iTower\x * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
+		tmpY = iTower\y * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
+		
+		If iTower\targetId = 0
+			For iEnemy.ENEMY = Each ENEMY
+				If Distance(tmpX,tmpY,iEnemy\x,iEnemy\y) <= iTower\range
+					iTower\targetId = iEnemy\id
+				EndIf
+			Next iEnemy
+		Else
+			If IsAlive(iTower\targetId)
+				tEnemy.ENEMY = ConvertToType(iTower\targetId)
+			
+				iTower\cannonAng = GetAngle(tmpX,tmpY,tEnemy\x,tEnemy\y)
+				
+				If Timer() > iTower\lastShot + iTower\sSpeed
+					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr)
+					
+					iTower\lastShot = Timer()
+				EndIf
+				
+				If Distance(tmpX,tmpY,tEnemy\x,tEnemy\y) > iTower\range
+					iTower\targetId = 0
+				EndIf
+			Else
+				iTower\targetId = 0
+			endif
+		EndIf
+	Next iTower
 EndFunction
 
 //Piirt‰‰ kaikki tornit
@@ -115,6 +152,7 @@ Function PrintTowerInfo()
 		Print "Price: " + iType\price
 		Print "Damage: " + iType\damage
 		Print "Range: " + iType\range
-		Print "Speed:" + iType\speed
+		Print "sSpeed: " + iType\sSpeed
+		Print "bSpeed: " + iType\bSpeed
 	Next iType
 EndFunction
