@@ -16,14 +16,14 @@ Function LoadEnemyData(file$)
 						value = Int(GetWord(l$,2,"="))
 						
 						Select attr$
-							case "maxhp"
+							Case "typenum"
+								nType\typeNum = value
+							Case "maxhp"
 								nType\maxHp = value
 							Case "speed"
 								nType\speed = value
 							Case "reward"
 								nType\reward = value
-							Case "difficulty"
-								nType\difficulty = value
 							Case "style"
 								val$ = Lower(Trim(GetWord(l$,2,"=")))
 								
@@ -60,6 +60,16 @@ Function LoadEnemyData(file$)
 		MakeError "File " + file$ + " n"+"ot found!"
 		Return False
 	EndIf
+EndFunction
+
+//Palauttaa vihollistyypin id:n
+Function GetEnemyTypeId(typeNum)
+	For iType.ENEMYTYPE = Each ENEMYTYPE
+		If iType\typeNum = typeNum
+			Return iType\id
+		EndIf
+	Next iType
+	Return False
 EndFunction
 
 //Luo uuden vihollisen ensimmäiselle waypointille
@@ -121,6 +131,7 @@ Function UpdateEnemies()
 		If Distance(iEnemy\x,iEnemy\y,tmpX,tmpY) <= 3
 			If iEnemy\nextWaypoint = gWaypointAmount
 				Delete iEnemy
+				gEnemyAmount = gEnemyAmount - 1
 			Else
 				iEnemy\x = tmpX
 				iEnemy\y = tmpY
@@ -161,3 +172,65 @@ Function DrawEnemies()
 		EndIf
 	Next iEnemy
 EndFunction
+
+//Lataa vihollisaallot
+Function LoadWaves(file$)
+	ClearArray OFF
+	
+	If FileExists(file$)
+		f = OpenToRead(file$)
+			While Not EOF(f)
+				l$ = ReadLine(f)
+				
+				//Jos riviä ei ole kommentoitu
+				If Left(l$,1) <> "#"
+					gGroupAmount = gGroupAmount + 1
+					ReDim gEnemyGroups(gGroupAmount + 1,GROUP_PROPERTIES - 1)
+					
+					gEnemyGroups(gGroupAmount,GROUP_WAVE) = Int(GetWord(l$,1,","))
+					gEnemyGroups(gGroupAmount,GROUP_TYPE) = Int(GetWord(l$,2,","))
+					gEnemyGroups(gGroupAmount,GROUP_AMOUNT) = Int(GetWord(l$,3,","))
+				EndIf
+			Wend
+		CloseFile f
+		
+		Return True
+	Else
+		MakeError "File " + file$ + " n"+"ot found!"
+		Return False
+	EndIf
+EndFunction
+
+//Päivittää vihollisaallot
+Function UpdateWaves()
+	If gSpawned = False
+		For i = 1 To gGroupAmount
+			If i = gCurrentGroup
+				gEnemyAmount = gEnemyAmount + gEnemyGroups(i,GROUP_AMOUNT)
+				
+				For k = 1 To gEnemyGroups(i,GROUP_AMOUNT)
+					nSpawn.SPAWN = New(SPAWN)
+						nSpawn\num = gEnemyGroups(i,GROUP_TYPE)
+				Next k
+				
+				If gEnemyGroups(i + 1,GROUP_WAVE) = gCurrentWave
+					gCurrentGroup = gCurrentGroup + 1
+				Else
+					gCurrentGroup = gCurrentGroup + 1
+					gSpawned = True
+					Exit
+				EndIf
+			EndIf
+		Next i
+	EndIf
+	
+	For iSpawn.SPAWN = Each SPAWN
+		If Timer() > gLastSpawn + SPAWN_INTERVAL
+			CreateEnemy(GetEnemyTypeId(iSpawn\num))
+			
+			gLastSpawn = Timer()
+			
+			Delete iSpawn
+		EndIf
+	Next iSpawn
+EndFunction		

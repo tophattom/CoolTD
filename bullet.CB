@@ -27,6 +27,7 @@ Function UpdateBullets()
 					
 					If iEnemy\hp <= 0
 						Delete iEnemy
+						gEnemyAmount = gEnemyAmount - 1
 					EndIf
 					
 					Delete iBullet

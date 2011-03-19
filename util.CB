@@ -1,9 +1,9 @@
 //Vihollisten tyypit
 Type ENEMYTYPE
+	Field typeNum
+	
 	Field maxHp
 	Field speed
-	
-	Field difficulty
 	
 	Field reward
 	
@@ -90,6 +90,11 @@ Type BULLET
 	Field clr
 EndType
 
+//Spawnausjono
+Type SPAWN
+	Field num
+EndType
+
 
 //Ruudukon vakiot
 Const GRID_SIZE = 30
@@ -121,11 +126,21 @@ Const WP_DIR = 2
 //Waypointtien ominaisuuksien kokonaism‰‰r‰
 Const WP_PROPERTIES = 3
 
+//Vakiot aaltojen ominaisuuksille
+Const GROUP_WAVE = 0
+Const GROUP_TYPE = 1
+Const GROUP_AMOUNT = 2
+//Kokonaism‰‰r‰
+Const GROUP_PROPERTIES = 3
+
 //Vihollistyylit
 Const STYLE_CIRCLE = 1
 Const STYLE_SQUARE = 2
 Const STYLE_PLUS = 3
 Const STYLE_X = 4
+
+//Kuinka tihe‰sti vihollisia luodaan
+Const SPAWN_INTERVAL = 500
 
 
 Global gScreenW,gScreenH
@@ -137,14 +152,25 @@ Global gPlaceTower		//Ollaanko tornia asettamassa
 Global gWaypointAmount	//Waypointtien m‰‰r‰
 	gWaypointAmount = 0
 	
-Global gTowerTypeAmount
+Global gGroupAmount
+Global gCurrentGroup
+	gCurrentGroup = 1
+Global gCurrentWave
+Global gSpawned
+	gSpawned = True
+
+Global gEnemyAmount
 
 Global gMoney
 	gMoney = 99999
 
 Global gLoopTime
+Global gLastSpawn
 Global gTest
 
 
 //Waypointit
 Dim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+
+//Vihollisaalloot
+Dim gEnemyGroups(gGroupAmount + 1,GROUP_PROPERTIES - 1)

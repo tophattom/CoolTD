@@ -9,6 +9,7 @@ SCREEN gScreenW,gScreenH
 
 LoadTowerData("data/towers.ini")
 LoadEnemyData("data/enemies.ini")
+LoadWaves("data/waves.txt")
 
 PrintTowerInfo()
 WaitKey
