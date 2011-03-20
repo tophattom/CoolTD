@@ -4,14 +4,12 @@ Include "tower.cb"
 Include "enemy.cb"
 Include "bullet.cb"
 Include "editor.cb"
+Include "gui.cb"
+Include "game.cb"
 
 SCREEN gScreenW,gScreenH
 
-LoadTowerData("data/towers.ini")
-LoadEnemyData("data/enemies.ini")
-LoadWaves("data/waves.txt")
+'editor()
 
-PrintTowerInfo()
-WaitKey
-
-Editor()
+InitGame()
+Run()

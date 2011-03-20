@@ -1,0 +1,60 @@
+//Piirtää rakennuslaatiko
+Function BuildMenu(x,y)
+	i = 0
+	maxWidth = 0
+	
+	For iType.TOWERTYPE = Each TOWERTYPE
+		tmpW = TextWidth(iType\name)
+		tmpW2 = TextWidth("Damage: " + iType\damage)
+		
+		If tmpW2 > tmpW
+			tmpW = tmpW2
+		EndIf
+		
+		If tmpW > maxWidth
+			maxWidth = tmpW
+		EndIf
+		
+		i = i + 1
+	Next iType
+	
+	Color cbBlack
+	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2),1
+	Color 0,255,0
+	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2),0
+	
+	i = 0
+	
+	For iType.TOWERTYPE = Each TOWERTYPE
+		tmpX = (x + 5)
+		tmpY = (y + 5) + i * (GRID_SIZE * 2)
+		
+		If gShowBuildMenu = True
+			If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
+				Color 128,0,0
+				Box tmpX,tmpY,GRID_SIZE,GRID_SIZE,0
+				
+				If MouseHit(1)
+					gPlaceTower = True
+					gSelectedTower = iType\id
+					gShowBuildMenu = False
+					Exit
+				EndIf
+			EndIf
+		EndIf
+		
+		tmpX2 = tmpX + (GRID_SIZE - TOWER_SIZE) / 2
+		tmpY2 = tmpY + (GRID_SIZE - TOWER_SIZE) / 2
+		
+		Color PeekByte(iType\clr,0),PeekByte(iType\clr,1),PeekByte(iType\clr,2)
+		Box tmpX2,tmpY2,TOWER_SIZE,TOWER_SIZE,0
+		Box tmpX2 + 3,tmpY2 + 3,TOWER_SIZE - 6,TOWER_SIZE - 6,1
+		
+		Text tmpX + GRID_SIZE,tmpY,iType\name
+		Text tmpX + GRID_SIZE,tmpY + 12,"Cost: " + iType\price
+		Text tmpX + GRID_SIZE,tmpY + 24,"Damage: " + iType\damage
+		Text tmpX + GRID_SIZE,tmpY + 36,"Range: " + iType\range
+		
+		i = i + 1
+	Next iType
+EndFunction

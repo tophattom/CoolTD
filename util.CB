@@ -147,25 +147,27 @@ Global gScreenW,gScreenH
 	gScreenW = GRID_SIZE * GRID_W
 	gScreenH = GRID_SIZE * GRID_H
 	
-Global gCurrentTower	//Valittu torni tai asetettava torni
+Global gSelectedTower	//Valittu torni tai asetettava torni
 Global gPlaceTower		//Ollaanko tornia asettamassa
 Global gWaypointAmount	//Waypointtien m‰‰r‰
 	gWaypointAmount = 0
 	
-Global gGroupAmount
-Global gCurrentGroup
+Global gGroupAmount		//Vihollisryhmien m‰‰r‰
+Global gCurrentGroup	//Nykyinen ryhm‰
 	gCurrentGroup = 1
-Global gCurrentWave
-Global gSpawned
+Global gCurrentWave		//Nykyinen aalto
+Global gSpawned			//Onko aalto jo spawnattu
 	gSpawned = True
 
-Global gEnemyAmount
+Global gEnemyAmount		//Vihollisten m‰‰r‰
 
-Global gMoney
-	gMoney = 99999
+Global gMoney			//Raha
+	
+Global gShowBuildMenu	//N‰ytet‰‰nkˆ rakennusvalikko
+	gShowMenu = False
 
 Global gLoopTime
-Global gLastSpawn
+Global gLastSpawn		//Viimeinen spawnaus
 Global gTest
 
 

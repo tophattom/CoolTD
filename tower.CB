@@ -63,7 +63,7 @@ EndFunction
 Function CreateTower(x,y,typeId)
 	tType.TOWERTYPE = ConvertToType(typeId)
 	
-	If gMoney > tType\price
+	If gMoney >= tType\price
 		gMoney = gMoney - tType\price
 		
 		nTower.TOWER = New(TOWER)

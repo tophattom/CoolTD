@@ -1,0 +1,64 @@
+//Alustaa pelin ja lataa kaiken tarvittavan
+Function InitGame()
+	LoadTowerData("data/towers.ini")
+	LoadEnemyData("data/enemies.ini")
+	LoadWaves("data/waves.txt")
+	
+	gMoney = 300
+	
+	LoadPath(1)
+EndFunction 
+
+//P‰‰ohjelma
+Function Run()
+	Repeat
+		loopStart = Timer()
+		
+		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "    " + gLoopTime
+		
+		mX = RoundDown(MouseX() / GRID_SIZE)
+		mY = RoundDown(MouseY() / GRID_SIZE)
+		
+		If gPlaceTower = True
+			Color 128,0,0
+			Box mX * GRID_SIZE,mY * GRID_SIZE,GRID_SIZE,GRID_SIZE
+			
+			If MouseHit(1) And CheckTile(mX,mY)
+				CreateTower(mX,mY,gSelectedTower)
+			ElseIf MouseHit(2)
+				gPlaceTower = False
+				gSelectedTower = 0
+			EndIf
+		Else
+			If MouseHit(1)
+				gSelectedTower = GetTowerId(mX,mY)
+			EndIf
+		EndIf
+		
+		If KeyHit(cbKeyB)
+			gShowBuildMenu = Not gShowBuildMenu
+		ElseIf KeyHit(28)
+			gSpawned = False
+			gCurrentWave = gCurrentWave + 1
+		EndIf
+		
+		UpdateWaves()
+		UpdateEnemies()
+		UpdateTowers()
+		UpdateBullets()
+		
+		DrawGrid()
+		DrawPath()
+		DrawEnemies()
+		DrawTowers()
+		DrawBullets()
+		
+		If gShowBuildMenu = True
+			BuildMenu(0,0)
+		EndIf
+		
+		DrawScreen
+		
+		gLoopTime = (Timer() - loopStart)
+	Forever
+EndFunction

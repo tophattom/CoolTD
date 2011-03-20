@@ -173,6 +173,13 @@ Function DrawEnemies()
 	Next iEnemy
 EndFunction
 
+//Poistaa kaikki viholliset
+Function ClearEnemies()
+	For iEnemy.ENEMY = Each ENEMY
+		Delete iEnemy
+	Next iEnemy
+EndFunction
+
 //Lataa vihollisaallot
 Function LoadWaves(file$)
 	ClearArray OFF
@@ -233,4 +240,11 @@ Function UpdateWaves()
 			Delete iSpawn
 		EndIf
 	Next iSpawn
-EndFunction		
+EndFunction
+
+//Tyhjent‰‰ spawnjonon
+Function ClearSpawn()
+	For iSpawn.SPAWN = Each SPAWN
+		Delete iSpawn
+	Next iSpawn
+EndFunction

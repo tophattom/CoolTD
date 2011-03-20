@@ -26,6 +26,8 @@ Function UpdateBullets()
 					iEnemy\hp = iEnemy\hp - iBullet\damage
 					
 					If iEnemy\hp <= 0
+						gMoney = gMoney + iEnemy\reward
+						
 						Delete iEnemy
 						gEnemyAmount = gEnemyAmount - 1
 					EndIf
