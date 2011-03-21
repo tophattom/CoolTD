@@ -16,8 +16,8 @@ EndType
 
 //Viholliskokoelma
 Type ENEMY
-	Field x
-	Field y
+	Field x As Float
+	Field y As Float
 	
 	Field speed As Float
 	
@@ -78,8 +78,8 @@ EndType
 
 //Ammuskokoelma
 Type BULLET
-	Field x
-	Field y
+	Field x As Float
+	Field y As Float
 	
 	Field ang
 	
@@ -166,7 +166,7 @@ Global gMoney			//Raha
 Global gShowBuildMenu	//Näytetäänkö rakennusvalikko
 	gShowMenu = False
 
-Global gLoopTime
+Global gLoopTime As float
 Global gLastSpawn		//Viimeinen spawnaus
 Global gTest
 

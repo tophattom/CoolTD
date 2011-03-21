@@ -109,21 +109,21 @@ EndFunction
 Function UpdateEnemies()
 	For iEnemy.ENEMY = Each ENEMY
 		If iEnemy\dir = DIR_UP
-			xPlus = 0
-			yPlus = -iEnemy\speed
+			xPlus# = 0
+			yPlus# = -iEnemy\speed
 		ElseIf iEnemy\dir = DIR_DOWN
-			xPlus = 0
-			yPlus = iEnemy\speed
+			xPlus# = 0
+			yPlus# = iEnemy\speed
 		ElseIf iEnemy\dir = DIR_LEFT
-			xPlus = -iEnemy\speed
-			yPlus = 0
+			xPlus# = -iEnemy\speed
+			yPlus# = 0
 		ElseIf iEnemy\dir = DIR_RIGHT
-			xPlus = iEnemy\speed
-			yPlus = 0
+			xPlus# = iEnemy\speed
+			yPlus# = 0
 		EndIf
 		
-		iEnemy\x = iEnemy\x + xPlus' * (gLoopTime / 1000)
-		iEnemy\y = iEnemy\y + yPlus' * (gLoopTime / 1000)
+		iEnemy\x = iEnemy\x + xPlus * (gLoopTime / 1000)
+		iEnemy\y = iEnemy\y + yPlus * (gLoopTime / 1000)
 		
 		tmpX = gWaypoints(iEnemy\nextWaypoint,WP_X) * GRID_SIZE + GRID_SIZE / 2
 		tmpY = gWaypoints(iEnemy\nextWaypoint,WP_Y) * GRID_SIZE + GRID_SIZE / 2

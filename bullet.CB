@@ -15,8 +15,8 @@ EndFunction
 //P‰ivitt‰‰ ammukset
 Function UpdateBullets()
 	For iBullet.BULLET = Each BULLET
-		iBullet\x = iBullet\x + Cos(iBullet\ang) * iBullet\speed' * (gLoopTime / 1000)
-		iBullet\y = iBullet\y - Sin(iBullet\ang) * iBullet\speed' * (gLoopTime / 1000)
+		iBullet\x = iBullet\x + Cos(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
+		iBullet\y = iBullet\y - Sin(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
 		
 		If iBullet\x < 0 Or iBullet\x > gScreenW Or iBullet\y < 0 Or iBullet\y > gScreenH
 			Delete iBullet
