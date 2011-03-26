@@ -141,6 +141,8 @@ Const STYLE_X = 4
 
 //Kuinka tihe‰sti vihollisia luodaan
 Const SPAWN_INTERVAL = 500
+//Aika aaltojen v‰liss‰
+Const WAVE_INTERVAL = 2000
 
 
 Global gScreenW,gScreenH
@@ -156,6 +158,7 @@ Global gGroupAmount		//Vihollisryhmien m‰‰r‰
 Global gCurrentGroup	//Nykyinen ryhm‰
 	gCurrentGroup = 1
 Global gCurrentWave		//Nykyinen aalto
+Global gWaveAmount		//Aaltojen m‰‰r‰
 Global gSpawned			//Onko aalto jo spawnattu
 	gSpawned = True
 
@@ -166,7 +169,7 @@ Global gMoney			//Raha
 Global gShowBuildMenu	//N‰ytet‰‰nkˆ rakennusvalikko
 	gShowMenu = False
 
-Global gLoopTime As float
+Global gLoopTime As Float
 Global gLastSpawn		//Viimeinen spawnaus
 Global gTest
 

@@ -201,11 +201,28 @@ Function LoadWaves(file$)
 			Wend
 		CloseFile f
 		
+		gWaveAmount = GetWaveAmount()
+		
 		Return True
 	Else
 		MakeError "File " + file$ + " n"+"ot found!"
 		Return False
 	EndIf
+EndFunction
+
+//Palauttaa aaltojen m‰‰r‰n
+Function GetWaveAmount()
+	lastWave = 0
+	tmpAmount = 0
+	
+	For i = 1 To gGroupAmount
+		If gEnemyGroups(i,GROUP_WAVE) > lastWave
+			tmpAmount = tmpAmount + 1
+			lastWave = gEnemyGroups(i,GROUP_WAVE)
+		EndIf
+	Next i
+	
+	Return tmpAmount
 EndFunction
 
 //P‰ivitt‰‰ vihollisaallot

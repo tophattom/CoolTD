@@ -14,7 +14,7 @@ Function Run()
 	Repeat
 		loopStart = Timer()
 		
-		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "    " + gLoopTime
+		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "    " + gLoopTime + "    Enemy count: " + gEnemyAmount
 		
 		mX = RoundDown(MouseX() / GRID_SIZE)
 		mY = RoundDown(MouseY() / GRID_SIZE)
@@ -40,6 +40,10 @@ Function Run()
 		ElseIf KeyHit(28)
 			gSpawned = False
 			gCurrentWave = gCurrentWave + 1
+			
+			If gCurrentWave > gWaveAmount
+				End
+			endif
 		EndIf
 		
 		UpdateWaves()
