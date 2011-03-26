@@ -265,17 +265,23 @@ EndFunction
 Function LoadPath(number)
 	ClearArray ON
 	
-	f = OpenToRead("Data/" + number + ".lvl")
-		gWaypointAmount = ReadByte(f)
+	If FileExists("Data/" + number + ".lvl") Then
+		f = OpenToRead("Data/" + number + ".lvl")
+			gWaypointAmount = ReadByte(f)
+			
+			ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+			
+			For i = 1 To gWaypointAmount
+				gWaypoints(i,WP_X) = ReadByte(f)
+				gWaypoints(i,WP_Y) = ReadByte(f)
+				gWaypoints(i,WP_DIR) = ReadByte(f)
+			Next i
+		CloseFile f
 		
-		ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
-		
-		For i = 1 To gWaypointAmount
-			gWaypoints(i,WP_X) = ReadByte(f)
-			gWaypoints(i,WP_Y) = ReadByte(f)
-			gWaypoints(i,WP_DIR) = ReadByte(f)
-		Next i
-	CloseFile f
+		Return True
+	Else
+		Return False
+	EndIf
 EndFunction
 	
 	
