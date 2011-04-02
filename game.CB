@@ -14,7 +14,7 @@ Function Run()
 	Repeat
 		loopStart = Timer()
 		
-		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "    " + gLoopTime + "    Enemy count: " + gEnemyAmount
+		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "/" + gWaveAmount + "    " + gLoopTime + "    Enemy count: " + gEnemyAmount
 		
 		mX = RoundDown(MouseX() / GRID_SIZE)
 		mY = RoundDown(MouseY() / GRID_SIZE)

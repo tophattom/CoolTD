@@ -122,8 +122,10 @@ Function UpdateEnemies()
 			yPlus# = 0
 		EndIf
 		
-		iEnemy\x = iEnemy\x + xPlus * (gLoopTime / 1000)
-		iEnemy\y = iEnemy\y + yPlus * (gLoopTime / 1000)
+		If iEnemy\cond <> SPECIAL_FREEZE
+			iEnemy\x = iEnemy\x + xPlus * (gLoopTime / 1000)
+			iEnemy\y = iEnemy\y + yPlus * (gLoopTime / 1000)
+		EndIf
 		
 		tmpX = gWaypoints(iEnemy\nextWaypoint,WP_X) * GRID_SIZE + GRID_SIZE / 2
 		tmpY = gWaypoints(iEnemy\nextWaypoint,WP_Y) * GRID_SIZE + GRID_SIZE / 2
@@ -139,6 +141,13 @@ Function UpdateEnemies()
 				iEnemy\dir = gWaypoints(iEnemy\nextWaypoint,WP_DIR)
 				
 				iEnemy\nextWaypoint = iEnemy\nextWaypoint + 1
+			EndIf
+		EndIf
+		
+		//Tilan poisto
+		If iEnemy\cond <> 0
+			If Timer() > iEnemy\condStart + iEnemy\condTime
+				iEnemy\cond = 0
 			EndIf
 		EndIf
 	Next iEnemy

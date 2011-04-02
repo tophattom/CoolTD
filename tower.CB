@@ -36,6 +36,25 @@ Function LoadTowerData(file$)
 								PokeByte nType\clr,0,Int(GetWord(values$,1,","))
 								PokeByte nType\clr,1,Int(GetWord(values$,2,","))
 								PokeByte nType\clr,2,Int(GetWord(values$,3,","))
+							Case "special"
+								values$ = Lower(Trim(GetWord(l$,2,"=")))
+								valueCount = CountWords(values$,",")
+								
+								nType\special = MakeMEMBlock(valueCount * 2)
+								
+								For i = 0 To valueCount - 1
+									tmpV$ = GetWord(values$,i + 1,",")
+									Select GetWord(tmpV$,1,":")
+										Case "air"
+											PokeByte nType\special,i * 2,SPECIAL_AIR
+										Case "freeze"
+											PokeByte nType\special,i * 2,SPECIAL_FREEZE
+											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
+										Case "fire"
+											PokeByte nType\special,i * 2,SPECIAL_FIRE
+											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
+									EndSelect
+								Next i
 						EndSelect
 					Until Lower(l$) = "[e"+"nd]"
 					
@@ -77,6 +96,8 @@ Function CreateTower(x,y,typeId)
 			
 			nTower\clr = tType\clr
 			
+			nTower\special = tType\special
+			
 			nTower\id = ConvertToInteger(nTower)
 	EndIf
 EndFunction
@@ -110,7 +131,7 @@ Function UpdateTowers()
 				iTower\cannonAng = GetAngle(tmpX,tmpY,tEnemy\x,tEnemy\y)
 				
 				If Timer() > iTower\lastShot + iTower\sSpeed
-					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr)
+					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr,iTower\special)
 					
 					iTower\lastShot = Timer()
 				EndIf

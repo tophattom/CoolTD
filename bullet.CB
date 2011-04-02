@@ -1,5 +1,5 @@
 //Luo uuden ammuksen
-Function CreateBullet(x,y,ang,speed,damage,clr)
+Function CreateBullet(x,y,ang,speed,damage,clr,special)
 	nBullet.BULLET = New(BULLET)
 		nBullet\x = x
 		nBullet\y = y
@@ -10,6 +10,8 @@ Function CreateBullet(x,y,ang,speed,damage,clr)
 		nBullet\damage = damage
 		
 		nBullet\clr = clr
+		
+		nBullet\special = special
 EndFunction
 
 //P‰ivitt‰‰ ammukset
@@ -23,6 +25,19 @@ Function UpdateBullets()
 		Else
 			For iEnemy.ENEMY = Each ENEMY
 				If Distance(iBullet\x,iBullet\y,iEnemy\x,iEnemy\y) <= iEnemy\size
+					//Tarkistetaan onko ammuksessa erikoisominaisuuksia
+					If iBullet\special <> 0 And iEnemy\cond = 0
+						For i = 0 To MEMBlockSize(iBullet\special) - 2 Step 2
+							tmpSpecial = PeekByte(iBullet\special,i)
+							
+							If tmpSpecial = SPECIAL_FREEZE Or tmpSpecial = SPECIAL_FIRE
+								iEnemy\cond = tmpSpecial
+								iEnemy\condStart = Timer()
+								iEnemy\condTime = PeekByte(iBullet\special,i + 1) * 1000
+							EndIf
+						Next i
+					EndIf
+					
 					iEnemy\hp = iEnemy\hp - iBullet\damage
 					
 					If iEnemy\hp <= 0

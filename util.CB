@@ -34,6 +34,10 @@ Type ENEMY
 	Field size
 	Field clr
 	
+	Field cond
+	Field condStart
+	Field condTime
+	
 	Field id
 EndType
 
@@ -49,6 +53,8 @@ Type TOWERTYPE
 	Field price
 	
 	Field clr
+	
+	Field special
 	
 	Field id
 EndType
@@ -73,6 +79,8 @@ Type TOWER
 	
 	Field clr
 	
+	Field special
+	
 	Field id
 EndType
 
@@ -88,6 +96,8 @@ Type BULLET
 	Field damage
 	
 	Field clr
+	
+	Field special
 EndType
 
 //Spawnausjono
@@ -138,6 +148,13 @@ Const STYLE_CIRCLE = 1
 Const STYLE_SQUARE = 2
 Const STYLE_PLUS = 3
 Const STYLE_X = 4
+
+//Vakiot eri erikoisominaisuuksille (tornit ja viholliset)
+Const SPECIAL_AIR = 1		//Lent‰v‰ vihollinen tai ilmaan ampuva torni
+Const SPECIAL_SPLIT = 2		//Hajoava vihollinen
+Const SPECIAL_FREEZE = 3	//J‰‰dytt‰v‰ torni
+Const SPECIAL_FIRE = 4		//Sytytt‰v‰ torni
+Const SPECIAL_TRANSFORM = 5	//Muuttuva vihollinen
 
 //Kuinka tihe‰sti vihollisia luodaan
 Const SPAWN_INTERVAL = 500
