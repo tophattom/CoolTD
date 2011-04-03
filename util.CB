@@ -11,6 +11,8 @@ Type ENEMYTYPE
 	Field size
 	Field clr
 	
+	Field special
+	
 	Field id
 EndType
 
@@ -33,6 +35,8 @@ Type ENEMY
 	Field style
 	Field size
 	Field clr
+	
+	Field special
 	
 	Field cond
 	Field condStart

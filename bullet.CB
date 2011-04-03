@@ -41,6 +41,20 @@ Function UpdateBullets()
 					iEnemy\hp = iEnemy\hp - iBullet\damage
 					
 					If iEnemy\hp <= 0
+						//Tarkistetaan onko vihollisessa erikoisominaisuuksia
+						If iEnemy\special <> 0
+							For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
+								tmpSpecial = PeekByte(iEnemy\special,i)
+								
+								If tmpSpecial = SPECIAL_SPLIT
+									//Vihollisen jakautuminen
+								ElseIf tmpSpecial = SPECIAL_TRANSFORM
+									CreateEnemy2(iEnemy\x,iEnemy\y,iEnemy\dir,iEnemy\nextWaypoint,GetEnemyTypeId(PeekByte(iEnemy\special,i + 1)))
+									gEnemyAmount = gEnemyAmount + 1
+								EndIf
+							Next i
+						EndIf
+						
 						gMoney = gMoney + iEnemy\reward
 						
 						Delete iEnemy

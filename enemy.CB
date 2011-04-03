@@ -47,6 +47,25 @@ Function LoadEnemyData(file$)
 								PokeByte nType\clr,0,Int(GetWord(values$,1,","))
 								PokeByte nType\clr,1,Int(GetWord(values$,2,","))
 								PokeByte nType\clr,2,Int(GetWord(values$,3,","))
+							Case "special"
+								values$ = Lower(Trim(GetWord(l$,2,"=")))
+								valueCount = CountWords(values$,",")
+								
+								nType\special = MakeMEMBlock(valueCount * 2)
+								
+								For i = 0 To valueCount - 1
+									tmpV$ = GetWord(values$,i + 1,",")
+									Select GetWord(tmpV$,1,":")
+										Case "air"
+											PokeByte nType\special,i * 2,SPECIAL_AIR
+										Case "split"
+											PokeByte nType\special,i * 2,SPECIAL_SPLIT
+											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
+										Case "transform"
+											PokeByte nType\special,i * 2,SPECIAL_TRANSFORM
+											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
+									EndSelect
+								Next i
 						EndSelect
 					Until Lower(l$) = "[e"+"nd]"
 					
@@ -92,9 +111,36 @@ Function CreateEnemy(enemyT)
 		nEnemy\size = eType\size
 		nEnemy\clr = eType\clr
 		
+		nEnemy\special = eType\special
+		
 		nEnemy\id = ConvertToInteger(nEnemy)
 EndFunction
 
+//Luo uuden vihollisen koordinaatteihin
+Function CreateEnemy2(x,y,dir,nextWp,enemyT)
+	eType.ENEMYTYPE = ConvertToType(enemyT)
+	
+	nEnemy.ENEMY = New(ENEMY)
+		nEnemy\x = x
+		nEnemy\y = y
+		
+		nEnemy\dir = dir
+		
+		nEnemy\nextWaypoint = nextWp
+		
+		nEnemy\hp = eType\maxHp
+		nEnemy\speed = eType\speed
+		nEnemy\reward = eType\reward
+		
+		nEnemy\style = eType\style
+		nEnemy\size = eType\size
+		nEnemy\clr = eType\clr
+		
+		nEnemy\special = eType\special
+		
+		nEnemy\id = ConvertToInteger(nEnemy)
+EndFunction
+		
 //Kertoo onko kyseinen vihollinen vielä olemassa
 Function IsAlive(enemyId)
 	For iEnemy.ENEMY = Each ENEMY
