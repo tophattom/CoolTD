@@ -23,7 +23,7 @@ Function Run()
 			Color 128,0,0
 			Box mX * GRID_SIZE,mY * GRID_SIZE,GRID_SIZE,GRID_SIZE
 			
-			If MouseHit(1) And CheckTile(mX,mY)
+			If MouseHit(1) And CheckTile(mX,mY) and gShowBuildMenu = False
 				CreateTower(mX,mY,gSelectedTower)
 			ElseIf MouseHit(2)
 				gPlaceTower = False
