@@ -165,6 +165,13 @@ Const SPAWN_INTERVAL = 500
 //Aika aaltojen v‰liss‰
 Const WAVE_INTERVAL = 2000
 
+//Vakiot setuksille
+Const SETTING_MVOLUME = 0
+Const SETTING_SVOLUME = 1
+Const SETTING_EFFECTS = 2
+//M‰‰r‰
+Const SETTINGS_AMOUNT = 3
+
 
 Global gScreenW,gScreenH
 	gScreenW = GRID_SIZE * GRID_W
@@ -200,3 +207,6 @@ Dim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
 
 //Vihollisaalloot
 Dim gEnemyGroups(gGroupAmount + 1,GROUP_PROPERTIES - 1)
+
+//Asetukset
+Dim gSettings(SETTINGS_AMOUNT - 1) As Byte

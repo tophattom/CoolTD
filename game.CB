@@ -1,5 +1,11 @@
 //Alustaa pelin ja lataa kaiken tarvittavan
 Function InitGame()
+	If FileExists("Data/settings.dat")
+		LoadSettings()
+	Else
+		DefaultSettings()
+	EndIf
+	
 	LoadTowerData("data/towers.ini")
 	LoadEnemyData("data/enemies.ini")
 	LoadWaves("data/waves.txt")
@@ -65,4 +71,31 @@ Function Run()
 		
 		gLoopTime = (Timer() - loopStart)
 	Forever
+EndFunction
+
+//Asettaa oletusasetukset
+Function DefaultSettings()
+	gSettings(SETTING_MVOLUME) = 100
+	gSettings(SETTING_SVOLUME) = 100
+	gSettings(SETTING_EFFECTS) = 1
+	
+	SaveSettings()
+EndFunction
+
+//Tallentaa asetukset
+Function SaveSettings()
+	f = OpenToWrite("Data/settings.dat")
+		For i = 0 To SETTINGS_AMOUNT - 1
+			WriteByte f,gSettings(i)
+		Next i
+	CloseFile f
+EndFunction
+
+//Lataa asetukset
+Function LoadSettings()
+	f = OpenToRead("Data/settings.dat")
+		For i = 0 To SETTINGS_AMOUNT - 1
+			gSettings(i) = ReadByte(f)
+		Next i
+	CloseFile f
 EndFunction
