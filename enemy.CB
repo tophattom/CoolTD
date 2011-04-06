@@ -214,11 +214,14 @@ Function DrawEnemies()
 				EndIf
 			Next i
 		EndIf
+		
+		//Varjon siirtymä
+		offset = 3
 
 		If iEnemy\style = STYLE_CIRCLE
 			If eAir = True
 				Color 25,25,25
-				Circle tmpX + 3,tmpY + 3,iEnemy\size,1
+				Circle tmpX + offset,tmpY + offset,iEnemy\size,1
 			EndIf
 			
 			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
@@ -226,7 +229,7 @@ Function DrawEnemies()
 		ElseIf iEnemy\style = STYLE_RECT
 			If eAir = True
 				Color 25,25,25
-				Box tmpX + 3,tmpY + 3,iEnemy\size,iEnemy\size,1
+				Box tmpX + offset,tmpY + offset,iEnemy\size,iEnemy\size,1
 			EndIf
 			
 			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
@@ -234,7 +237,7 @@ Function DrawEnemies()
 		ElseIf iEnemy\style = STYLE_X
 			If eAir = True
 				Color 25,25,25
-				DrawX(tmpX + 3,tmpY + 3,iEnemy\size)
+				DrawX(tmpX + offset,tmpY + offset,iEnemy\size)
 			EndIf
 			
 			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
@@ -242,7 +245,7 @@ Function DrawEnemies()
 		ElseIf iEnemy\style = STYLE_PLUS
 			If eAir = True
 				Color 25,25,25
-				DrawPlus(tmpX + 3,tmpY + 3,iEnemy\size)
+				DrawPlus(tmpX + offset,tmpY + offset,iEnemy\size)
 			EndIf
 			
 			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
