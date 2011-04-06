@@ -204,28 +204,71 @@ Function DrawEnemies()
 	For iEnemy.ENEMY = Each ENEMY
 		tmpX = iEnemy\x - (iEnemy\size / 2)
 		tmpY = iEnemy\y - (iEnemy\size / 2)
-	
-		Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
-		If iEnemy\style = STYLE_CIRCLE
-			Circle tmpX,tmpY,iEnemy\size,1
-		ElseIf iEnemy\style = STYLE_RECT
-			Box tmpX,tmpY,iEnemy\size,iEnemy\size,1
-		ElseIf iEnemy\style = STYLE_X
-			tmpSize = iEnemy\size / 5
-			
-			For i = 0 To 4
-				Box tmpX + i * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
-				Box (tmpX + (iEnemy\size - tmpSize)) - i * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
-			Next i
-		ElseIf iEnemy\style = STYLE_PLUS
-			tmpSize = iEnemy\size / 5
-			
-			For i = 0 To 4
-				Box tmpX + 2 * tmpSize,tmpY + i * tmpSize,tmpSize,tmpSize,1
-				Box tmpX + i * tmpSize,tmpY + 2 * tmpSize,tmpSize,tmpSize,1
+		
+		//Onko ilmassa
+		eAir = False
+		If iEnemy\special <> 0
+			For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
+				If PeekByte(iEnemy\special,i) = SPECIAL_AIR
+					eAir = True
+				EndIf
 			Next i
 		EndIf
+
+		If iEnemy\style = STYLE_CIRCLE
+			If eAir = True
+				Color 25,25,25
+				Circle tmpX + 3,tmpY + 3,iEnemy\size,1
+			EndIf
+			
+			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+			Circle tmpX,tmpY,iEnemy\size,1
+		ElseIf iEnemy\style = STYLE_RECT
+			If eAir = True
+				Color 25,25,25
+				Box tmpX + 3,tmpY + 3,iEnemy\size,iEnemy\size,1
+			EndIf
+			
+			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+			Box tmpX,tmpY,iEnemy\size,iEnemy\size,1
+		ElseIf iEnemy\style = STYLE_X
+			If eAir = True
+				Color 25,25,25
+				DrawX(tmpX + 3,tmpY + 3,iEnemy\size)
+			EndIf
+			
+			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+			DrawX(tmpX,tmpY,iEnemy\size)
+		ElseIf iEnemy\style = STYLE_PLUS
+			If eAir = True
+				Color 25,25,25
+				DrawPlus(tmpX + 3,tmpY + 3,iEnemy\size)
+			EndIf
+			
+			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+			DrawPlus(tmpX,tmpY,iEnemy\size)
+		EndIf
 	Next iEnemy
+EndFunction
+
+//Piirt‰‰ x:n
+Function DrawX(x,y,size)
+	tmpSize = size / 5
+			
+	For i = 0 To 4
+		Box x + i * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
+		Box (x + (size - tmpSize)) - i * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
+	Next i
+EndFunction
+
+//Piirt‰‰ plussan
+Function DrawPlus(x,y,size)
+	tmpSize = size / 5
+			
+	For i = 0 To 4
+		Box x + 2 * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
+		Box x + i * tmpSize,y + 2 * tmpSize,tmpSize,tmpSize,1
+	Next i
 EndFunction
 
 //Poistaa kaikki viholliset

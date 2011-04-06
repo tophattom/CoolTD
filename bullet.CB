@@ -17,6 +17,8 @@ EndFunction
 //P‰ivitt‰‰ ammukset
 Function UpdateBullets()
 	For iBullet.BULLET = Each BULLET
+		bAir = False
+		
 		iBullet\x = iBullet\x + Cos(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
 		iBullet\y = iBullet\y - Sin(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
 		
@@ -34,11 +36,27 @@ Function UpdateBullets()
 								iEnemy\cond = tmpSpecial
 								iEnemy\condStart = Timer()
 								iEnemy\condTime = PeekByte(iBullet\special,i + 1) * 1000
+							ElseIf tmpSpecial = SPECIAL_AIR
+								bAir = True
+							EndIf
+						Next i
+					EndIf
+				
+					//Tarkastetaan onko vihollinen ilmassa
+					eAir = False
+					If iEnemy\special <> 0
+						For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
+							If PeekByte(iEnemy\special,i) = SPECIAL_AIR
+								eAir = True
 							EndIf
 						Next i
 					EndIf
 					
-					iEnemy\hp = iEnemy\hp - iBullet\damage
+					If eAir = True And bAir = True	//Jos vihollinen ON ilmassa ja torni ampuu ilmaan
+						iEnemy\hp = iEnemy\hp - iBullet\damage
+					ElseIf eAir = False And bAir = False	//Jos molemmat maassa
+						iEnemy\hp = iEnemy\hp - iBullet\damage
+					EndIf
 					
 					If iEnemy\hp <= 0
 						//Tarkistetaan onko vihollisessa erikoisominaisuuksia
