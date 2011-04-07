@@ -21,16 +21,16 @@ Function BuildMenu(x,y)
 	
 	//Pohjalaatikko
 	Color cbBlack
-	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2),1
+	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2.5),1
 	Color 0,255,0
-	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2),0
+	Box x,y,10 + GRID_SIZE + maxWidth,10 + i * (GRID_SIZE * 2.5),0
 	
 	i = 0
 	
 	//Tornien piirto
 	For iType.TOWERTYPE = Each TOWERTYPE
 		tmpX = (x + 5)
-		tmpY = (y + 5) + i * (GRID_SIZE * 2)
+		tmpY = (y + 5) + i * (GRID_SIZE * 2.5)
 		
 		If gShowBuildMenu = True
 			If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
@@ -59,6 +59,20 @@ Function BuildMenu(x,y)
 		Text tmpX + GRID_SIZE,tmpY + 12,"Cost: " + iType\price
 		Text tmpX + GRID_SIZE,tmpY + 24,"Damage: " + iType\damage
 		Text tmpX + GRID_SIZE,tmpY + 36,"Range: " + iType\range
+		
+		If iType\special <> 0
+			For k = 0 To MEMBlockSize(iType\special) - 2 Step 2
+				tmpSpecial = PeekByte(iType\special,k)
+				
+				If tmpSpecial = SPECIAL_AIR
+					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Air targets"
+				ElseIf tmpSpecial = SPECIAL_FREEZE
+					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Stops enemy"
+				ElseIf tmpSpecial = SPECIAL_FIRE
+					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Ignites"
+				EndIf
+			Next k
+		EndIf
 		
 		i = i + 1
 	Next iType
