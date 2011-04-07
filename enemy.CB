@@ -366,3 +366,18 @@ Function ClearSpawn()
 		Delete iSpawn
 	Next iSpawn
 EndFunction
+
+//Tarkistaa onko vihollinen lentävä
+Function IsAirEnemy(enemyId)
+	tEnemy.ENEMY = ConvertToType(enemyId)
+	
+	If tEnemy\special <> 0
+		For i = 0 To MEMBlockSize(tEnemy\special) - 2 Step 2
+			If PeekByte(tEnemy\special,i) = SPECIAL_AIR
+				Return True
+			EndIf
+		Next i
+	EndIf
+	
+	Return False
+EndFunction

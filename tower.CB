@@ -115,13 +115,22 @@ EndFunction
 //P‰ivitt‰‰ tornien logiikan
 Function UpdateTowers()
 	For iTower.TOWER = Each TOWER
+		//Onko ilmatorni
+		tAir = IsAirTower(iTower\id)
+		
 		tmpX = iTower\x * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
-		tmpY = iTower\y * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
+		tmpY = iTower\y * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2	
 		
 		If iTower\targetId = 0
 			For iEnemy.ENEMY = Each ENEMY
-				If Distance(tmpX,tmpY,iEnemy\x,iEnemy\y) <= iTower\range
-					iTower\targetId = iEnemy\id
+				//Onko lent‰v‰ vihollinen
+				eAir = IsAirEnemy(iEnemy\id)
+				
+				//Valitaan kohde vain jos vihollinen ja torni ovat samaa tyyppi‰
+				If (tAir = True And eAir = True) Or (tAir = False And eAir = False)
+					If Distance(tmpX,tmpY,iEnemy\x,iEnemy\y) <= iTower\range
+						iTower\targetId = iEnemy\id
+					EndIf
 				EndIf
 			Next iEnemy
 		Else
@@ -141,7 +150,7 @@ Function UpdateTowers()
 				EndIf
 			Else
 				iTower\targetId = 0
-			endif
+			EndIf
 		EndIf
 	Next iTower
 EndFunction
@@ -176,4 +185,19 @@ Function PrintTowerInfo()
 		Print "sSpeed: " + iType\sSpeed
 		Print "bSpeed: " + iType\bSpeed
 	Next iType
+EndFunction
+
+//Tarkistaa ampuuko torni ilmaan
+Function IsAirTower(towerId)
+	tTower.TOWER = ConvertToType(towerId)
+	
+	If tTower\special <> 0
+		For i = 0 To MEMBlockSize(tTower\special) - 2 Step 2
+			If PeekByte(tTower\special,i) = SPECIAL_AIR
+				Return True
+			EndIf
+		Next i
+	EndIf
+	
+	Return False
 EndFunction

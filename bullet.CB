@@ -25,7 +25,11 @@ Function UpdateBullets()
 		If iBullet\x < 0 Or iBullet\x > gScreenW Or iBullet\y < 0 Or iBullet\y > gScreenH
 			Delete iBullet
 		Else
+			//Törmäys vihollisiin
 			For iEnemy.ENEMY = Each ENEMY
+				//Tarkastetaan onko vihollinen ilmassa
+				eAir = IsAirEnemy(iEnemy\id)
+				
 				If Distance(iBullet\x,iBullet\y,iEnemy\x,iEnemy\y) <= iEnemy\size
 					//Tarkistetaan onko ammuksessa erikoisominaisuuksia
 					If iBullet\special <> 0 And iEnemy\cond = 0
@@ -41,16 +45,6 @@ Function UpdateBullets()
 							EndIf
 						Next i
 					EndIf
-				
-					//Tarkastetaan onko vihollinen ilmassa
-					eAir = False
-					If iEnemy\special <> 0
-						For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
-							If PeekByte(iEnemy\special,i) = SPECIAL_AIR
-								eAir = True
-							EndIf
-						Next i
-					EndIf
 					
 					If eAir = True And bAir = True	//Jos vihollinen ON ilmassa ja torni ampuu ilmaan
 						iEnemy\hp = iEnemy\hp - iBullet\damage
@@ -58,7 +52,7 @@ Function UpdateBullets()
 						iEnemy\hp = iEnemy\hp - iBullet\damage
 					EndIf
 					
-					If iEnemy\hp <= 0
+					If iEnemy\hp <= 0	//Jos vihollinen kuolee
 						//Tarkistetaan onko vihollisessa erikoisominaisuuksia
 						If iEnemy\special <> 0
 							For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
@@ -92,6 +86,7 @@ Function UpdateBullets()
 							Next i
 						EndIf
 						
+						//Rahan lisäys
 						gMoney = gMoney + iEnemy\reward
 						
 						Delete iEnemy
