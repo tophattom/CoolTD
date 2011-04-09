@@ -59,6 +59,7 @@ Type TOWERTYPE
 	Field clr
 	
 	Field special
+	Field upgrades
 	
 	Field id
 EndType
@@ -84,6 +85,7 @@ Type TOWER
 	Field clr
 	
 	Field special
+	Field upgrades
 	
 	Field id
 EndType
@@ -171,6 +173,15 @@ Const SETTING_SVOLUME = 1
 Const SETTING_EFFECTS = 2
 //M‰‰r‰
 Const SETTINGS_AMOUNT = 3
+
+//Vakioita p‰ivityksille
+Const UP_START = 1
+Const UP_END = 2
+Const UP_LEVEL = 3
+Const UP_DAMAGE = 4
+Const UP_RANGE = 5
+Const UP_SSPEED = 6
+Const UP_BSPEED = 7
 
 
 Global gScreenW,gScreenH
