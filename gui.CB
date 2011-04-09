@@ -77,3 +77,53 @@ Function BuildMenu(x,y)
 		i = i + 1
 	Next iType
 EndFunction
+
+//Piirt‰‰ tornin infolaatikon
+Function TowerInfo(towerId)
+	tTower.TOWER = ConvertToType(towerId)
+
+	tmpW = TextWidth("Bullet speed: " + tTower\sSpeed) + 10
+	tmpH = 58
+	
+	If tTower\special <> 0
+		tmpH = tmpH + (MEMBlockSize(tTower\special) / 2) * 12
+	EndIf
+	
+	tmpX = tTower\x * GRID_SIZE + GRID_SIZE
+	tmpY = tTower\y * GRID_SIZE
+	
+	If (tmpX + tmpW) > gScreenW
+		tmpX = tTower\x * GRID_SIZE - tmpW
+	EndIf
+	
+	If (tmpY + tmpH) > gScreenH
+		tmpY = tmpY - tmpH
+	EndIf
+		
+	//Pohjalaatikko
+	Color cbBlack
+	Box tmpX,tmpY,tmpW,tmpH,1
+	Color PeekByte(tTower\clr,0),PeekByte(tTower\clr,1),PeekByte(tTower\clr,2)
+	Box tmpX,tmpY,tmpW,tmpH,0
+	
+	//Tiedot
+	Text tmpX + 5,tmpY + 5,"Damage: " + tTower\damage
+	Text tmpX + 5,tmpY + 17,"Range: " + tTower\range
+	Text tmpX + 5,tmpY + 29,"Reload t"+"ime: " + tTower\sSpeed
+	Text tmpX + 5,tmpY + 41,"Bullet speed: " + tTower\bSpeed
+	
+	If tTower\special <> 0
+		For k = 0 To MEMBlockSize(tTower\special) - 2 Step 2
+			tmpSpecial = PeekByte(tTower\special,k)
+			
+			If tmpSpecial = SPECIAL_AIR
+				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Air targets"
+			ElseIf tmpSpecial = SPECIAL_FREEZE
+				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Stops enemy"
+			ElseIf tmpSpecial = SPECIAL_FIRE
+				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Ignites"
+			EndIf
+		Next k
+	EndIf
+EndFunction
+	

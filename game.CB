@@ -67,6 +67,10 @@ Function Run()
 			BuildMenu(0,0)
 		EndIf
 		
+		If gSelectedTower <> 0 And gPlaceTower = False
+			TowerInfo(gSelectedTower)
+		endif
+		
 		DrawScreen
 		
 		gLoopTime = (Timer() - loopStart)
