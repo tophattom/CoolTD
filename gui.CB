@@ -89,7 +89,8 @@ Function TowerInfo(towerId)
 		tmpH = tmpH + (MEMBlockSize(tTower\special) / 2) * 12
 	EndIf
 	
-	If CountUpgrades(tTower\Id) > 0
+	tmpCount = CountUpgrades(tTower\id)
+	If tmpCount > 0 And (tTower\level - 1) < tmpCount
 		tmpH = tmpH + 29
 	EndIf
 	
@@ -130,7 +131,7 @@ Function TowerInfo(towerId)
 		Next k
 	EndIf
 	
-	If CountUpgrades(tTower\id) > 0
+	If tmpCount > 0 And (tTower\level - 1) < tmpCount
 		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,2,UP_PRICE) + ")")
 	
 		If tmp = 2
