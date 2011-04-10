@@ -36,8 +36,10 @@ Function Run()
 				gSelectedTower = 0
 			EndIf
 		Else
-			If MouseHit(1)
+			If MouseHit(1) And GetTowerId(mX,mY) <> 0
 				gSelectedTower = GetTowerId(mX,mY)
+			ElseIf MouseHit(2) Or KeyHit(cbKeyEsc)
+				gSelectedTower = 0
 			EndIf
 		EndIf
 		
@@ -69,7 +71,7 @@ Function Run()
 		
 		If gSelectedTower <> 0 And gPlaceTower = False
 			TowerInfo(gSelectedTower)
-		endif
+		EndIf
 		
 		DrawScreen
 		

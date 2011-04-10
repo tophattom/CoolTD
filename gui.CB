@@ -89,6 +89,10 @@ Function TowerInfo(towerId)
 		tmpH = tmpH + (MEMBlockSize(tTower\special) / 2) * 12
 	EndIf
 	
+	If CountUpgrades(tTower\Id) > 0
+		tmpH = tmpH + 29
+	EndIf
+	
 	tmpX = tTower\x * GRID_SIZE + GRID_SIZE
 	tmpY = tTower\y * GRID_SIZE
 	
@@ -125,5 +129,40 @@ Function TowerInfo(towerId)
 			EndIf
 		Next k
 	EndIf
+	
+	If CountUpgrades(tTower\id) > 0
+		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,2,UP_PRICE) + ")")
+	
+		If tmp = 2
+			UpgradeTower(tTower\id,2)
+		EndIf
+	EndIf
+EndFunction
+
+//Piirtää napin
+Function Button(x,y,t$)
+	tmpW = 10 + TextWidth(t$)
+	tmpH = 10 + TextHeight(t$)
+	
+	r = getRGB(RED)
+	g = getRGB(GREEN)
+	b = getRGB(BLUE)
+	
+	//Pohjalaatikko
+	Color cbBlack
+	Box x,y,tmpW,tmpH,1
+
+	If MouseX() > x And MouseX() < (x + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
+		Color r / 2,g / 2,b / 2
+		hover = True
+	Else
+		Color r,g,b
+		hover = False
+	EndIf
+	
+	Box x,y,tmpW,tmpH,0
+	Text x + 5,y + 5,t$
+	
+	Return hover + MouseHit(1)
 EndFunction
 	

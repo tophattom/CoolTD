@@ -55,6 +55,53 @@ Function LoadTowerData(file$)
 											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
 									EndSelect
 								Next i
+							Case "[upgrade]"
+								If nType\upgrades = 0
+									nType\upgrades = MakeMEMBlock(4)
+								Else
+									ResizeMEMBlock nType\upgrades,MEMBlockSize(nType\upgrades) + 4
+								EndIf
+								
+								tmp = MakeMEMBlock(1)
+								PokeByte tmp,0,UP_START
+
+								Repeat
+									l$ = ReadLine(f)
+									attr$ = Lower(Trim(GetWord(l$,1,"=")))
+									value = Int(GetWord(l$,2,"="))
+									
+									Select attr$
+										Case "level"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_LEVEL
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+										Case "price"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_PRICE
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+										Case "damage"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_DAMAGE
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+										Case "range"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_RANGE
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+										Case "sspeed"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_SSPEED
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+										Case "bspeed"
+											ResizeMEMBlock tmp,MEMBlockSize(tmp) + 5
+											PokeByte tmp,MEMBlockSize(tmp) - 5,UP_BSPEED
+											PokeInt tmp,MEMBlockSize(tmp) - 4,value
+									EndSelect
+								Until Lower(Trim(l$)) = "[/upgrade]"
+								
+								ResizeMEMBlock tmp,MEMBlockSize(tmp) + 1
+								PokeByte tmp,MEMBlockSize(tmp) - 1,UP_END
+								
+								PokeInt nType\upgrades,MEMBlockSize(nType\upgrades) - 4,tmp
 						EndSelect
 					Until Lower(l$) = "[e"+"nd]"
 					
@@ -97,6 +144,9 @@ Function CreateTower(x,y,typeId)
 			nTower\clr = tType\clr
 			
 			nTower\special = tType\special
+			nTower\upgrades = tType\upgrades
+			
+			nTower\level = 1
 			
 			nTower\id = ConvertToInteger(nTower)
 	EndIf
@@ -164,13 +214,20 @@ Function DrawTowers()
 		centerX = tmpX + TOWER_SIZE / 2
 		centerY = tmpY + TOWER_SIZE / 2
 		
+		//Tornin kuva
 		Color PeekByte(iTower\clr,0),PeekByte(iTower\clr,1),PeekByte(iTower\clr,2)
 		Box tmpX,tmpY,TOWER_SIZE,TOWER_SIZE,0
 		Box tmpX + 3,tmpY + 3,TOWER_SIZE - 6,TOWER_SIZE - 6,1
 		
+		//Levelilaatikot
+		For i = 1 To iTower\level
+			Box tmpX + (i - 1) * 3,tmpY - 3,2,2,1
+		Next i
+		
 		//Piirretään kantama jos torni ON valittu
 		If gSelectedTower = iTower\id
 			Circle centerX - iTower\range,centerY - iTower\range,iTower\range * 2,0
+			Text centerX + 50,centerY + 100,CountUpgrades(iTower\id)
 		EndIf
 	Next iTower
 EndFunction
@@ -200,4 +257,82 @@ Function IsAirTower(towerId)
 	EndIf
 	
 	Return False
+EndFunction
+
+//Laskee päivitysten määrän
+Function CountUpgrades(towerId)
+	tTower.TOWER = ConvertToType(towerId)
+	
+	If tTower\upgrades = 0
+		Return 0
+	Else
+		Return MEMBlockSize(tTower\upgrades) / 4
+	EndIf
+EndFunction
+
+//Palauttaa upgraden muistipalan
+Function GetUpgradeMem(towerId,level)
+	tTower.TOWER = ConvertToType(towerId)
+	
+	If CountUpgrades(towerId) > 0
+		For i = 0 To MEMBlockSize(tTower\upgrades) - 4 Step 4
+			tmpMem = PeekInt(tTower\upgrades,i)
+			tmpAmount = (MEMBlockSize(tmpMem) - 2) / 5
+
+			For k = 0 To tmpAmount - 1
+				If PeekByte(tmpMem,1 + i * 5) = UP_LEVEL
+					tmpLvl = PeekInt(tmpMem,2 + i * 5)
+
+					If tmpLvl = level
+						Return tmpMem
+					EndIf
+				EndIf
+			Next k
+		Next i
+	EndIf
+EndFunction
+		
+//Palauttaa päivityksen hinnan
+Function GetUpgradeProperty(towerId,level,prop)
+	tTower.TOWER = ConvertToType(towerId)
+	
+	If CountUpgrades(towerId) > 0
+		upMem = GetUpgradeMem(towerId,level)
+
+		For i = 1 To MEMBlockSize(upMem) - 6 Step 5
+			If PeekByte(upMem,i) = prop
+				Return PeekInt(upMem,i + 1)
+			EndIf
+		Next i
+	EndIf
+EndFunction
+
+//Päivittää tornin
+Function UpgradeTower(towerId,level)
+	price = GetUpgradeProperty(towerId,level,UP_PRICE)
+	If gMoney >= price
+		gMoney = gMoney - price
+		
+		tTower.TOWER = ConvertToType(towerId)
+		
+		upgrade = GetUpgradeMem(towerId,level)
+		tmpAmount = (MEMBlockSize(upgrade) - 2) / 5
+		
+		For i = 0 To tmpAmount - 1
+			tmpProp = PeekByte(upgrade,1 + i * 5)
+			tmpValue = PeekInt(upgrade,2 + i * 5)
+			
+			If tmpProp = UP_DAMAGE
+				tTower\damage = tmpValue
+			ElseIf tmpProp = UP_RANGE
+				tTower\range = tmpValue
+			ElseIf tmpProp = UP_SSPEED
+				tTower\sSpeed = tmpValue
+			ElseIf tmpProp = UP_BSPEED
+				tTower\bSpeed = tmpValue
+			EndIf
+		Next i
+	
+		tTower\level = level
+	endif
 EndFunction

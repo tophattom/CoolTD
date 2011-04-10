@@ -175,13 +175,13 @@ Const SETTING_EFFECTS = 2
 Const SETTINGS_AMOUNT = 3
 
 //Vakioita päivityksille
-Const UP_START = 1
-Const UP_END = 2
-Const UP_LEVEL = 3
-Const UP_DAMAGE = 4
-Const UP_RANGE = 5
-Const UP_SSPEED = 6
-Const UP_BSPEED = 7
+Const UP_START = 255
+Const UP_END = 254
+Const UP_LEVEL = 253
+Const UP_DAMAGE = 252
+Const UP_RANGE = 251
+Const UP_SSPEED =250
+Const UP_BSPEED = 249
 
 
 Global gScreenW,gScreenH
