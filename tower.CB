@@ -223,11 +223,10 @@ Function DrawTowers()
 		For i = 1 To iTower\level
 			Box tmpX + (i - 1) * 3,tmpY - 3,2,2,1
 		Next i
-		
+
 		//Piirretään kantama jos torni ON valittu
 		If gSelectedTower = iTower\id
 			Circle centerX - iTower\range,centerY - iTower\range,iTower\range * 2,0
-			Text centerX + 50,centerY + 100,CountUpgrades(iTower\id)
 		EndIf
 	Next iTower
 EndFunction
@@ -280,15 +279,16 @@ Function GetUpgradeMem(towerId,level)
 			tmpAmount = (MEMBlockSize(tmpMem) - 2) / 5
 
 			For k = 0 To tmpAmount - 1
-				If PeekByte(tmpMem,1 + i * 5) = UP_LEVEL
-					tmpLvl = PeekInt(tmpMem,2 + i * 5)
-
+				If PeekByte(tmpMem,1 + k * 5) = UP_LEVEL	
+					tmpLvl = PeekInt(tmpMem,2 + k * 5)
 					If tmpLvl = level
 						Return tmpMem
 					EndIf
 				EndIf
 			Next k
 		Next i
+		
+		Return 0
 	EndIf
 EndFunction
 		
@@ -298,12 +298,16 @@ Function GetUpgradeProperty(towerId,level,prop)
 	
 	If CountUpgrades(towerId) > 0
 		upMem = GetUpgradeMem(towerId,level)
-
-		For i = 1 To MEMBlockSize(upMem) - 6 Step 5
-			If PeekByte(upMem,i) = prop
-				Return PeekInt(upMem,i + 1)
-			EndIf
-		Next i
+		
+		If upMem <> 0
+			tmpAmount = (MEMBlockSize(upMem) - 2) / 5
+			
+			For i = 0 To tmpAmount - 1
+				If PeekByte(upMem,1 + i * 5) = prop
+					Return PeekInt(upMem,2 + i * 5)
+				EndIf
+			Next i
+		EndIf
 	EndIf
 EndFunction
 
@@ -334,5 +338,5 @@ Function UpgradeTower(towerId,level)
 		Next i
 	
 		tTower\level = level
-	endif
+	EndIf
 EndFunction

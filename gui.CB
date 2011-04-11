@@ -132,10 +132,10 @@ Function TowerInfo(towerId)
 	EndIf
 	
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
-		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,2,UP_PRICE) + ")")
+		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
 	
 		If tmp = 2
-			UpgradeTower(tTower\id,2)
+			UpgradeTower(tTower\id,tTower\level + 1)
 		EndIf
 	EndIf
 EndFunction
