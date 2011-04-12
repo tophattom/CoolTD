@@ -154,6 +154,7 @@ Const STYLE_CIRCLE = 1
 Const STYLE_SQUARE = 2
 Const STYLE_PLUS = 3
 Const STYLE_X = 4
+Const STYLE_DIAMOND = 5
 
 //Vakiot eri erikoisominaisuuksille (tornit ja viholliset)
 Const SPECIAL_AIR = 1		//Lentävä vihollinen tai ilmaan ampuva torni

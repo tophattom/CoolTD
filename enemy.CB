@@ -36,6 +36,8 @@ Function LoadEnemyData(file$)
 										nType\style = STYLE_X
 									Case "circ"
 										nType\style = STYLE_CIRCLE
+									Case "diamond"
+										nType\style = STYLE_DIAMOND
 								EndSelect
 							Case "size"
 								nType\size = value
@@ -250,7 +252,15 @@ Function DrawEnemies()
 			
 			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
 			DrawPlus(tmpX,tmpY,iEnemy\size)
-		EndIf
+		ElseIf iEnemy\style = STYLE_DIAMOND
+			If eAir = True
+				Color 25,25,25
+				DrawDiamond(tmpX + offset,tmpY + offset,iEnemy\size)
+			EndIf
+			
+			Color PeekByte(iEnemy\clr,0),PeekByte(iEnemy\clr,1),PeekByte(iEnemy\clr,2)
+			DrawDiamond(tmpX,tmpY,iEnemy\size)
+		endif
 	Next iEnemy
 EndFunction
 
@@ -271,6 +281,18 @@ Function DrawPlus(x,y,size)
 	For i = 0 To 4
 		Box x + 2 * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
 		Box x + i * tmpSize,y + 2 * tmpSize,tmpSize,tmpSize,1
+	Next i
+EndFunction
+
+//Pirtää vinoneliön
+Function DrawDiamond(x,y,size)
+	tmpSize = size / 5
+	
+	For i = 0 To 2
+		Box x + (i + 2) * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
+		Box x + i * tmpSize,y + (i + 2) * tmpSize,tmpSize,tmpSize,1
+		Box (x + 2 * tmpSize) - i * tmpSize,y + i * tmpSize,tmpSize,tmpSize,1
+		Box (x + (size - tmpSize)) - i * tmpSize,y + (i + 2) * tmpSize,tmpSize,tmpSize,1
 	Next i
 EndFunction
 
