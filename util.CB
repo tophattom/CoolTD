@@ -184,6 +184,11 @@ Const UP_RANGE = 251
 Const UP_SSPEED =250
 Const UP_BSPEED = 249
 
+//Vakiot lopetusarvoille
+Const EXIT_SUCCESS = 1
+Const EXIT_GAMEOVER = 2
+Const EXIT_INTERRUPT = 3
+
 
 Global gScreenW,gScreenH
 	gScreenW = GRID_SIZE * GRID_W
@@ -205,6 +210,8 @@ Global gSpawned			//Onko aalto jo spawnattu
 Global gEnemyAmount		//Vihollisten määrä
 
 Global gMoney			//Raha
+Global gLives			//Elämät
+	gLives = 20
 	
 Global gShowBuildMenu	//Näytetäänkö rakennusvalikko
 	gShowMenu = False
@@ -222,3 +229,9 @@ Dim gEnemyGroups(gGroupAmount + 1,GROUP_PROPERTIES - 1)
 
 //Asetukset
 Dim gSettings(SETTINGS_AMOUNT - 1) As Byte
+
+//Pausevalikon tekstit
+Dim gPauseTexts(2) As String
+	gPauseTexts(0) = "Resume game"
+	gPauseTexts(1) = "Options"
+	gPauseTexts(2) = "Quit t"+"o menu"

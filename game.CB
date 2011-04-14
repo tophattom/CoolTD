@@ -20,7 +20,7 @@ Function Run()
 	Repeat
 		loopStart = Timer()
 		
-		SetWindow "Money: " + gMoney + "    Current wave: " + gCurrentWave + "/" + gWaveAmount + "    " + gLoopTime + "    Enemy count: " + gEnemyAmount
+		SetWindow "Money: " + gMoney + "    Lives: " + gLives + "    Current wave: " + gCurrentWave + "/" + gWaveAmount + "    Enemy count: " + gEnemyAmount + "    " + gLoopTime
 		
 		mX = RoundDown(MouseX() / GRID_SIZE)
 		mY = RoundDown(MouseY() / GRID_SIZE)
@@ -38,7 +38,7 @@ Function Run()
 		Else
 			If MouseHit(1) And GetTowerId(mX,mY) <> 0
 				gSelectedTower = GetTowerId(mX,mY)
-			ElseIf MouseHit(2) Or KeyHit(cbKeyEsc)
+			ElseIf MouseHit(2)
 				gSelectedTower = 0
 			EndIf
 		EndIf
@@ -50,8 +50,15 @@ Function Run()
 			gCurrentWave = gCurrentWave + 1
 			
 			If gCurrentWave > gWaveAmount
-				End
-			endif
+				Return EXIT_SUCCESS
+			EndIf
+		EndIf
+		
+		If gLives = 0	//Elämät loppu -> game over
+			Return EXIT_GAMEOVER
+		ElseIf KeyHit(cbKeyEsc)	//Esc -> pause
+			PauseMenu()
+			Return EXIT_INTERRUPT	//Väliaikainen, hoidetaan myöhemmin pausevalikosta
 		EndIf
 		
 		UpdateWaves()
@@ -79,7 +86,7 @@ Function Run()
 		EndIf
 		
 		DrawScreen
-		
+
 		gLoopTime = (Timer() - loopStart)
 	Forever
 EndFunction

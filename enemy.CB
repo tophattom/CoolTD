@@ -182,6 +182,7 @@ Function UpdateEnemies()
 			If iEnemy\nextWaypoint = gWaypointAmount
 				Delete iEnemy
 				gEnemyAmount = gEnemyAmount - 1
+				gLives = gLives - 1
 			Else
 				iEnemy\x = tmpX
 				iEnemy\y = tmpY

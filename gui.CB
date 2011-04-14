@@ -140,6 +140,51 @@ Function TowerInfo(towerId)
 	EndIf
 EndFunction
 
+//Piirt‰‰ pausevalikon
+Function PauseMenu()
+	//Tallennetaan pelitilanne kuvaan
+	tmpImg = MakeImage(gScreenW,gScreenH)
+	CopyBox 0,0,gScreenW,gScreenH,0,0,SCREEN(),Image(tmpImg)
+	
+	tmpW = 30 + TextWidth("Quit To menu")
+	tmpH = 123
+	
+	tmpX = gScreenW / 2 - tmpW / 2
+	tmpY = gScreenH / 2 - tmpH / 2
+	
+	Repeat
+		DrawImage tmpImg,0,0
+		
+		//Pohjalaatikko
+		Color cbBlack
+		Box tmpX,tmpY,tmpW,tmpH,1
+		Color 0,255,0
+		Box tmpX,tmpY,tmpW,tmpH,0
+		
+		//Teksti
+		CenterText tmpX + tmpW / 2,tmpY + 10,"Paused"
+		
+		For i = 0 To 2
+			Color 0,255,0
+			tmp = Button(tmpX + 10,tmpY + 32 + i * 27,gPauseTexts(i))
+			
+			If tmp = 2
+				Select i
+					Case 1
+						End
+					Case 2
+						//Options()
+					Case 3
+						//Menuun
+				EndSelect
+			EndIf
+			
+		Next i
+		
+		DrawScreen
+	Forever
+EndFunction
+
 //Piirt‰‰ napin
 Function Button(x,y,t$)
 	tmpW = 10 + TextWidth(t$)
