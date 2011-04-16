@@ -142,10 +142,6 @@ EndFunction
 
 //Piirt‰‰ pausevalikon
 Function PauseMenu()
-	//Tallennetaan pelitilanne kuvaan
-	tmpImg = MakeImage(gScreenW,gScreenH)
-	CopyBox 0,0,gScreenW,gScreenH,0,0,SCREEN(),Image(tmpImg)
-	
 	tmpW = 30 + TextWidth("Quit To menu")
 	tmpH = 123
 	
@@ -153,8 +149,6 @@ Function PauseMenu()
 	tmpY = gScreenH / 2 - tmpH / 2
 	
 	Repeat
-		DrawImage tmpImg,0,0
-		
 		//Pohjalaatikko
 		Color cbBlack
 		Box tmpX,tmpY,tmpW,tmpH,1
@@ -170,15 +164,15 @@ Function PauseMenu()
 			
 			If tmp = 2
 				Select i
+					Case 0
+						gLoopStart = Timer()
+						Return True
 					Case 1
-						End
-					Case 2
 						//Options()
-					Case 3
-						//Menuun
+					Case 2
+						Return False
 				EndSelect
-			EndIf
-			
+			EndIf	
 		Next i
 		
 		DrawScreen

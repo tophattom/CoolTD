@@ -18,7 +18,7 @@ EndFunction
 //Pääohjelma
 Function Run()
 	Repeat
-		loopStart = Timer()
+		gLoopStart = Timer()
 		
 		SetWindow "Money: " + gMoney + "    Lives: " + gLives + "    Current wave: " + gCurrentWave + "/" + gWaveAmount + "    Enemy count: " + gEnemyAmount + "    " + gLoopTime
 		
@@ -57,8 +57,11 @@ Function Run()
 		If gLives = 0	//Elämät loppu -> game over
 			Return EXIT_GAMEOVER
 		ElseIf KeyHit(cbKeyEsc)	//Esc -> pause
-			PauseMenu()
-			Return EXIT_INTERRUPT	//Väliaikainen, hoidetaan myöhemmin pausevalikosta
+			tmp = PauseMenu()
+			
+			If tmp = False
+				Return EXIT_INTERRUPT
+			EndIf
 		EndIf
 		
 		UpdateWaves()
@@ -87,7 +90,7 @@ Function Run()
 		
 		DrawScreen
 
-		gLoopTime = (Timer() - loopStart)
+		gLoopTime = (Timer() - gLoopStart)
 	Forever
 EndFunction
 

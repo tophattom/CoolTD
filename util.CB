@@ -217,6 +217,7 @@ Global gShowBuildMenu	//Näytetäänkö rakennusvalikko
 	gShowMenu = False
 
 Global gLoopTime As Float
+Global gLoopStart
 Global gLastSpawn		//Viimeinen spawnaus
 Global gTest
 
@@ -234,4 +235,4 @@ Dim gSettings(SETTINGS_AMOUNT - 1) As Byte
 Dim gPauseTexts(2) As String
 	gPauseTexts(0) = "Resume game"
 	gPauseTexts(1) = "Options"
-	gPauseTexts(2) = "Quit t"+"o menu"
+	gPauseTexts(2) = "Exit game"
