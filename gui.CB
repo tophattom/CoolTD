@@ -149,6 +149,12 @@ Function PauseMenu()
 	tmpY = gScreenH / 2 - tmpH / 2
 	
 	Repeat
+		DrawGrid()
+		DrawPath()
+		DrawEnemies()
+		DrawTowers()
+		DrawBullets()
+		
 		//Pohjalaatikko
 		Color cbBlack
 		Box tmpX,tmpY,tmpW,tmpH,1
