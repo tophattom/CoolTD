@@ -230,9 +230,16 @@ Dim gEnemyGroups(gGroupAmount + 1,GROUP_PROPERTIES - 1)
 
 //Asetukset
 Dim gSettings(SETTINGS_AMOUNT - 1) As Byte
+//Asetusten tekstit		0 = asetuksen nimi	1 = pois p‰‰lt‰ -teksti	2 = p‰‰ll‰-teksti
+Dim gSettingTexts(SETTINGS_AMOUNT - 1,2) As String
+	gSettingTexts(SETTING_MVOLUME,0) = "Music volume: "
+	gSettingTexts(SETTING_SVOLUME,0) = "Sound volume: "
+	gSettingTexts(SETTING_EFFECTS,0) = "Effects: "
+	gSettingTexts(SETTING_EFFECTS,1) = "OFF"
+	gSettingTexts(SETTING_EFFECTS,2) = "ON"
 
 //Pausevalikon tekstit
 Dim gPauseTexts(2) As String
 	gPauseTexts(0) = "Resume game"
-	gPauseTexts(1) = "Options"
+	gPauseTexts(1) = "Settings"
 	gPauseTexts(2) = "Exit game"

@@ -142,6 +142,7 @@ EndFunction
 
 //Piirtää pausevalikon
 Function PauseMenu()
+	//Tallennetaan nykyinen tilanne kuvaan
 	tmpImg = MakeImage(gScreenW,gScreenH)
 	CopyBox 0,0,gScreenW,gScreenH,0,0,SCREEN(),Image(tmpImg)
 	
@@ -173,7 +174,7 @@ Function PauseMenu()
 						gLoopStart = Timer()
 						Return True
 					Case 1
-						//Options()
+						SettingsMenu()
 					Case 2
 						Return False
 				EndSelect
@@ -181,7 +182,70 @@ Function PauseMenu()
 		Next i
 		
 		DrawScreen
-	Forever
+	Until KeyHit(cbKeyEsc)
+	
+	gLoopStart = Timer()
+	Return true
+EndFunction
+
+//Asetusvalikko
+Function SettingsMenu()
+	//Tallennetaan nykyinen tilanne kuvaan
+	tmpImg = MakeImage(gScreenW,gScreenH)
+	CopyBox 0,0,gScreenW,gScreenH,0,0,SCREEN(),Image(tmpImg)
+	
+	tmpW = 45 + TextWidth("Back") + TextWidth("Default settings")
+	tmpH = 52 + 12 * SETTINGS_AMOUNT + 22
+	
+	tmpX = gScreenW / 2 - tmpW / 2
+	tmpY = gScreenH / 2 - tmpH / 2
+	
+	Repeat
+		DrawImage tmpImg,0,0
+
+		//Pohjalaatikko
+		Color cbBlack
+		Box tmpX,tmpY,tmpW,tmpH,1
+		Color 0,255,0
+		Box tmpX,tmpY,tmpW,tmpH,0
+		
+		//Otsikkoteksti
+		CenterText tmpX + tmpW / 2,tmpY + 10,"Settings"
+		
+		For i = 0 To SETTINGS_AMOUNT - 1
+			Color 0,255,0
+			tmp = ClickText(tmpX + 10,tmpY + 32 + i * 12,gSettingTexts(i,0))
+			
+			If gSettingTexts(i,1) = ""	//Jos asetuksella ON numeroarvo
+				Text tmpX + 10 + TextWidth(gSettingTexts(i,0)),tmpY + 32 + i * 12,gSettings(i)
+				
+				If tmp = 1
+					gSettings(i) = Max(0,Min(100,gSettings(i) + MouseMoveZ()))
+				EndIf
+			Else	//Jos asetus ON päälle/pois -tyyppinen
+				Text tmpX + 10 + TextWidth(gSettingTexts(i,0)),tmpY + 32 + i * 12,gSettingTexts(i,gSettings(i) + 1)
+				
+				If tmp = 2
+					gSettings(i) = Not gSettings(i)
+				EndIf
+			EndIf
+		Next i
+		
+		Color 0,255,0
+		back = Button(tmpX + 10,tmpY + 42 + 12 * SETTINGS_AMOUNT,"Back")
+		Color 0,255,0
+		def = Button(tmpX + 25 + TextWidth("Back"),tmpY + 42 + 12 * SETTINGS_AMOUNT,"Default settings")
+		
+		If back = 2
+			Exit
+		ElseIf def = 2
+			DefaultSettings()
+		EndIf
+		
+		DrawScreen
+	Until KeyHit(cbKeyEsc)
+	
+	SaveSettings()
 EndFunction
 
 //Piirtää napin
@@ -207,6 +271,28 @@ Function Button(x,y,t$)
 	
 	Box x,y,tmpW,tmpH,0
 	Text x + 5,y + 5,t$
+	
+	Return hover + MouseHit(1)
+EndFunction
+
+//Klikattava teksti
+Function ClickText(x,y,t$)
+	tmpW = TextWidth(t$)
+	tmpH = TextHeight(t$)
+	
+	r = getRGB(RED)
+	g = getRGB(GREEN)
+	b = getRGB(BLUE)
+	
+	If MouseX() > x And MouseX() < (x + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
+		Color r / 2,g / 2,b / 2
+		hover = True
+	Else
+		Color r,g,b
+		hover = False
+	EndIf
+	
+	Text x,y,t$
 	
 	Return hover + MouseHit(1)
 EndFunction
