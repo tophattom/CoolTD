@@ -142,6 +142,9 @@ EndFunction
 
 //Piirt‰‰ pausevalikon
 Function PauseMenu()
+	tmpImg = MakeImage(gScreenW,gScreenH)
+	CopyBox 0,0,gScreenW,gScreenH,0,0,SCREEN(),Image(tmpImg)
+	
 	tmpW = 30 + TextWidth("Quit To menu")
 	tmpH = 123
 	
@@ -149,12 +152,8 @@ Function PauseMenu()
 	tmpY = gScreenH / 2 - tmpH / 2
 	
 	Repeat
-		DrawGrid()
-		DrawPath()
-		DrawEnemies()
-		DrawTowers()
-		DrawBullets()
-		
+		DrawImage tmpImg,0,0
+
 		//Pohjalaatikko
 		Color cbBlack
 		Box tmpX,tmpY,tmpW,tmpH,1
