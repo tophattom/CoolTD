@@ -13,5 +13,8 @@ SCREEN gScreenW,gScreenH
 
 'editor()
 
-InitGame()
-Run()
+'InitGame()
+'Run()
+
+LoadSettings()
+MainMenu()

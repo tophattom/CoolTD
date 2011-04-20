@@ -140,6 +140,43 @@ Function TowerInfo(towerId)
 	EndIf
 EndFunction
 
+//Päävalikko
+Function MainMenu()
+
+	Repeat
+		DrawGrid()
+
+		Color 0,255,0
+		CenterText gScreenW / 2,30,"Primitive-Defence"
+
+		For i = 0 To 3
+			Color 0,255,0
+			tmp = Button(gScreenW / 2,100 + 37 * i,gMenuTexts(i),1)
+			
+			If tmp = 2
+				Select i
+					Case 0
+						InitGame()
+						Run()
+					Case 1
+						setting = True
+					Case 2
+						//Credits
+					Case 3
+						End
+				EndSelect
+			EndIf
+		Next i
+		
+		If setting = True
+			SettingsMenu()
+			setting = False
+		EndIf
+		
+		DrawScreen
+	Forever
+EndFunction	
+
 //Piirtää pausevalikon
 Function PauseMenu()
 	//Tallennetaan nykyinen tilanne kuvaan
@@ -166,7 +203,7 @@ Function PauseMenu()
 		
 		For i = 0 To 2
 			Color 0,255,0
-			tmp = Button(tmpX + 10,tmpY + 32 + i * 27,gPauseTexts(i))
+			tmp = Button(tmpX + tmpW / 2,tmpY + 32 + i * 27,gPauseTexts(i),1)
 			
 			If tmp = 2
 				Select i
@@ -249,9 +286,15 @@ Function SettingsMenu()
 EndFunction
 
 //Piirtää napin
-Function Button(x,y,t$)
+Function Button(x,y,t$,center=0)
 	tmpW = 10 + TextWidth(t$)
 	tmpH = 10 + TextHeight(t$)
+	
+	If center = 1
+		tmpX = x - tmpW / 2
+	Else
+		tmpX = x
+	EndIf
 	
 	r = getRGB(RED)
 	g = getRGB(GREEN)
@@ -259,9 +302,9 @@ Function Button(x,y,t$)
 	
 	//Pohjalaatikko
 	Color cbBlack
-	Box x,y,tmpW,tmpH,1
+	Box tmpX,y,tmpW,tmpH,1
 
-	If MouseX() > x And MouseX() < (x + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
+	If MouseX() > tmpX And MouseX() < (tmpX + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
 		Color r / 2,g / 2,b / 2
 		hover = True
 	Else
@@ -269,8 +312,8 @@ Function Button(x,y,t$)
 		hover = False
 	EndIf
 	
-	Box x,y,tmpW,tmpH,0
-	Text x + 5,y + 5,t$
+	Box tmpX,y,tmpW,tmpH,0
+	Text tmpX + 5,y + 5,t$
 	
 	Return hover + MouseHit(1)
 EndFunction

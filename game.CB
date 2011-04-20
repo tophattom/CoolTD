@@ -84,6 +84,8 @@ Function Run()
 			tmp = PauseMenu()
 			
 			If tmp = False
+				ClearEnemies()
+				ClearPath()
 				Return EXIT_INTERRUPT
 			EndIf
 		EndIf

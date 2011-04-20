@@ -105,10 +105,14 @@ Function DrawPath()
 		prevY = gWaypoints(prevWaypoint,WP_Y)
 		
 		//Waypoint-kohtien piirtäminen
-		Color cbDark
-		If currentWaypoint = 1 Or currentWaypoint = gWaypointAmount
+		If currentWaypoint = 1	//Alku
+			Color 64,80,64
+			Box currentX * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
+		ElseIf currentWaypoint = gWaypointAmount	//Loppu
+			Color 80,64,64
 			Box currentX * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
 		Else
+			Color cbDark
 			//Valitaan oikeanlainen kulmapala
 			If currentX = prevX
 				If currentY < prevY
@@ -143,6 +147,7 @@ Function DrawPath()
 			DrawPathCorner(currentX * GRID_SIZE,currentY * GRID_SIZE,tmpCorner)
 		EndIf
 		
+		Color cbDark
 		//Piirretään reitti waypointtien väliin
 		If currentDirection = DIR_UP
 			startPoint = currentY - 1
@@ -283,5 +288,3 @@ Function LoadPath(number)
 		Return False
 	EndIf
 EndFunction
-	
-	

@@ -242,4 +242,11 @@ Dim gSettingTexts(SETTINGS_AMOUNT - 1,2) As String
 Dim gPauseTexts(2) As String
 	gPauseTexts(0) = "Resume game"
 	gPauseTexts(1) = "Settings"
-	gPauseTexts(2) = "Exit game"
+	gPauseTexts(2) = "Quit game"
+	
+//P‰‰valikon tekstit
+Dim gMenuTexts(3) As String
+	gMenuTexts(0) = "Start game"
+	gMenuTexts(1) = "Settings"
+	gMenuTexts(2) = "Credits"
+	gMenuTexts(3) = "Exit game"
