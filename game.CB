@@ -13,6 +13,7 @@ Function InitGame()
 	gMoney = 300
 	
 	LoadPath(1)
+	'RandomPath()
 EndFunction 
 
 //Pääohjelma
@@ -50,6 +51,11 @@ Function Run()
 			gCurrentWave = gCurrentWave + 1
 			
 			If gCurrentWave > gWaveAmount
+				ClearTowers()
+				ClearSpawn()
+				ClearEnemies()
+				ClearPath()
+				
 				Return EXIT_SUCCESS
 			EndIf
 		EndIf
@@ -84,8 +90,11 @@ Function Run()
 			tmp = PauseMenu()
 			
 			If tmp = False
+				ClearTowers()
+				ClearSpawn()
 				ClearEnemies()
 				ClearPath()
+				
 				Return EXIT_INTERRUPT
 			EndIf
 		EndIf

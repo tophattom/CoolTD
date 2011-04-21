@@ -288,3 +288,50 @@ Function LoadPath(number)
 		Return False
 	EndIf
 EndFunction
+
+//Luo satunnaisen retitin
+Function RandomPath(maxDist = 7,minAmount = 15)
+	//Aloituskohta
+	Repeat
+		startX = Rand(0,GRID_W - 1)
+		startY = Rand(0,GRID_H - 1)
+		
+		If startX = 0 Or startX = (GRID_W - 1)
+			dir = DIR_UP
+			Exit
+		ElseIf startY = 0 Or startY = (GRID_H - 1)
+			dir = DIR_LEFT
+			Exit
+		EndIf
+	Forever
+	
+	AddWaypoint(startX,startY)
+	
+	While gWaypointAmount <= minAmount
+		tmpX = gWaypoints(gWaypointAmount,WP_X)
+		tmpY = gWaypoints(gWaypointAmount,WP_Y)
+		
+		minX = Max(0,tmpX - maxDist)
+		maxX = Min(GRID_W - 1,tmpX + maxDist)
+		minY = Max(0,tmpY - maxDist)
+		maxY = Min(GRID_H - 1,tmpY + maxDist)
+		
+		If gWaypointAmount > 1
+			dir = gWaypoints(gWaypointAmount - 1,WP_DIR)
+		EndIf
+		
+		If dir = DIR_UP Or dir = DIR_DOWN
+			nextX = Rand(minX,maxX)
+			nextY = tmpY
+		ElseIf dir = DIR_LEFT Or dir = DIR_RIGHT
+			nextX = tmpX
+			nextY = Rand(minY,maxY)
+		EndIf
+		
+		If CheckTile(nextX,nextY)
+			AddWaypoint(nextX,nextY)
+			SetWaypointDir(gWaypointAmount - 1)
+		EndIf
+	Wend
+EndFunction
+

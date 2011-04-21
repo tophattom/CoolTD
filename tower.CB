@@ -340,3 +340,10 @@ Function UpgradeTower(towerId,level)
 		tTower\level = level
 	EndIf
 EndFunction
+
+//Poistaa kaikki tornit
+Function ClearTowers()
+	For iTower.TOWER = Each TOWER
+		Delete iTower
+	Next iTower
+EndFunction
