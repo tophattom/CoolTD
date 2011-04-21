@@ -86,6 +86,11 @@ Function UpdateBullets()
 							Next i
 						EndIf
 						
+						//R‰j‰hdys jos efektit p‰‰ll‰
+						If gSettings(SETTING_EFFECTS) = 1
+							Explosion(iEnemy\x,iEnemy\y,30,60,300,iEnemy\clr)
+						endif
+						
 						//Rahan lis‰ys
 						gMoney = gMoney + iEnemy\reward
 						

@@ -71,6 +71,12 @@ Function Run()
 		DrawTowers()
 		DrawBullets()
 		
+		//P‰ivitet‰‰n ja piirret‰‰n partikkelit jos efektit p‰‰ll‰
+		If gSettings(SETTING_EFFECTS) = 1
+			UpdateParticles()
+			DrawParticles()
+		endif
+		
 		If gShowBuildMenu = True
 			BuildMenu(0,0)
 		EndIf

@@ -1,0 +1,40 @@
+//Luo uuden räjähdyksen
+Function Explosion(x,y,pAmount,size,speed As Float,clr)
+	For i = 1 To pAmount
+		nPar.PARTICLE = New(PARTICLE)
+			nPar\x = x
+			nPar\y = y
+			
+			nPar\startX = x
+			nPar\startY = y
+			
+			ang = Rand(360)
+			nPar\xPlus = Cos(ang) * (speed + Rnd(-speed / 2,speed / 2))
+			nPar\yPlus = -Sin(ang) * (speed + Rnd(-speed / 2,speed / 2))
+			
+			nPar\range = size + Rand(-size / 3,size / 3)
+			
+			nPar\clr = clr
+	Next i
+EndFunction
+
+//Partikkelien päivitys
+Function UpdateParticles()
+	For iPar.PARTICLE = Each PARTICLE
+		iPar\x = iPar\x + iPar\xPlus * (gLoopTime / 1000)
+		iPar\y = iPar\y + iPar\yPlus * (gLoopTime / 1000)
+		
+		If Distance(iPar\startX,iPar\startY,iPar\x,iPar\y) > iPar\range
+			Delete iPar
+		EndIf
+	Next iPar
+EndFunction
+
+//Partikkelien piirto
+Function DrawParticles()
+	For iPar.PARTICLE = Each PARTICLE
+		Color PeekByte(iPar\clr,0),PeekByte(iPar\clr,1),PeekByte(iPar\clr,2)
+		Circle iPar\x - 1,iPar\y - 1,2
+		'Dot iPar\x,iPar\y
+	Next iPar
+EndFunction

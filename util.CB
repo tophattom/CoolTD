@@ -111,6 +111,22 @@ Type SPAWN
 	Field num
 EndType
 
+//Partikkelit
+Type PARTICLE
+	Field x As Float
+	Field y As Float
+	
+	Field startX As Float
+	Field startY As Float
+	
+	Field xPlus As Float
+	Field yPlus As Float
+	
+	Field range As Float
+	
+	Field clr
+EndType
+
 
 //Ruudukon vakiot
 Const GRID_SIZE = 30

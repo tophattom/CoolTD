@@ -6,6 +6,7 @@ Include "bullet.cb"
 Include "editor.cb"
 Include "gui.cb"
 Include "game.cb"
+Include "particle.cb"
 
 SAFEEXIT OFF
 
