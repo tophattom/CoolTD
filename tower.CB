@@ -192,6 +192,8 @@ Function UpdateTowers()
 				If Timer() > iTower\lastShot + iTower\sSpeed
 					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr,iTower\special)
 					
+					PlaySound2(SND_SHOOT)
+					
 					iTower\lastShot = Timer()
 				EndIf
 				

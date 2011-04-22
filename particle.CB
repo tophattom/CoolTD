@@ -16,6 +16,8 @@ Function Explosion(x,y,pAmount,size,speed As Float,clr)
 			
 			nPar\clr = clr
 	Next i
+	
+	PlaySound2(SND_EXPLOSION)
 EndFunction
 
 //Partikkelien päivitys
