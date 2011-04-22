@@ -200,6 +200,17 @@ Const UP_RANGE = 251
 Const UP_SSPEED =250
 Const UP_BSPEED = 249
 
+//Vakiot ‰‰nille
+Const SND_EXP1 = 0
+Const SND_EXP2 = 1
+Const SND_EXP3 = 2
+Const SND_SHOOT = 3
+Const SND_HIT = 4
+Const SND_HOVER = 5
+Const SND_CLICK = 6
+//M‰‰r‰
+Const SND_AMOUNT = 7
+
 //Vakiot lopetusarvoille
 Const EXIT_SUCCESS = 1
 Const EXIT_GAMEOVER = 2
@@ -266,3 +277,6 @@ Dim gMenuTexts(3) As String
 	gMenuTexts(1) = "Settings"
 	gMenuTexts(2) = "Credits"
 	gMenuTexts(3) = "Exit game"
+	
+//ƒ‰net
+Dim gSounds(SND_AMOUNT - 1)
