@@ -73,7 +73,7 @@ Function LoadEnemyData(file$)
 					
 					nType\id = ConvertToInteger(nType)
 					
-					gTest = nType\id
+					gEnemyTypeAmount = gEnemyTypeAmount + 1
 				EndIf
 			Wend
 		CloseFile f
@@ -302,6 +302,8 @@ Function ClearEnemies()
 	For iEnemy.ENEMY = Each ENEMY
 		Delete iEnemy
 	Next iEnemy
+	
+	gEnemyAmount = 0
 EndFunction
 
 //Lataa vihollisaallot

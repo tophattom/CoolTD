@@ -106,6 +106,8 @@ Function LoadTowerData(file$)
 					Until Lower(l$) = "[e"+"nd]"
 					
 					nType\id = ConvertToInteger(nType)
+					
+					gTowerTypeAmount = gTowerTypeAmount + 1
 				EndIf
 			Wend
 		CloseFile f

@@ -221,6 +221,7 @@ Global gScreenW,gScreenH
 	
 Global gSelectedTower	//Valittu torni tai asetettava torni
 Global gPlaceTower		//Ollaanko tornia asettamassa
+Global gTowerTypeAmount	//Tornityyppien lukum‰‰r‰
 Global gWaypointAmount	//Waypointtien m‰‰r‰
 	gWaypointAmount = 0
 	
@@ -232,6 +233,7 @@ Global gWaveAmount		//Aaltojen m‰‰r‰
 Global gSpawned			//Onko aalto jo spawnattu
 	gSpawned = True
 
+Global gEnemyTypeAmount	//Vihollistyyppien m‰‰r‰
 Global gEnemyAmount		//Vihollisten m‰‰r‰
 
 Global gMoney			//Raha

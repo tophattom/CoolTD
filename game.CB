@@ -6,9 +6,20 @@ Function InitGame()
 		DefaultSettings()
 	EndIf
 	
-	LoadTowerData("data/towers.ini")
-	LoadEnemyData("data/enemies.ini")
-	LoadWaves("data/waves.txt")
+	If gTowerTypeAmount = 0
+		LoadTowerData("data/towers.ini")
+	EndIf
+	
+	If gEnemyTypeAmount = 0
+		LoadEnemyData("data/enemies.ini")
+	EndIf
+	
+	If gWaveAmount = 0
+		LoadWaves("data/waves.txt")
+	EndIf
+	
+	gCurrentWave = 0
+	gCurrentGroup = 1
 	
 	gMoney = 300
 	
