@@ -187,9 +187,10 @@ Const WAVE_INTERVAL = 2000
 //Vakiot setuksille
 Const SETTING_MVOLUME = 0
 Const SETTING_SVOLUME = 1
-Const SETTING_EFFECTS = 2
+Const SETTING_SUFFLE = 2
+Const SETTING_EFFECTS = 3
 //M‰‰r‰
-Const SETTINGS_AMOUNT = 3
+Const SETTINGS_AMOUNT = 4
 
 //Vakioita p‰ivityksille
 Const UP_START = 255
@@ -206,8 +207,12 @@ Const SND_SHOOT = 1
 Const SND_HIT = 2
 Const SND_FREEZE = 3
 Const SND_IGNITE = 4
+Const SND_MUSIC = 5
 //M‰‰r‰
-Const SND_AMOUNT = 5
+Const SND_AMOUNT = 6
+//Toisen ulottuvuuden vakiot
+Const SND_MEM = 0
+Const SND_CHANNEL = 1
 
 //Vakiot lopetusarvoille
 Const EXIT_SUCCESS = 1
@@ -264,6 +269,9 @@ Dim gSettingTexts(SETTINGS_AMOUNT - 1,2) As String
 	gSettingTexts(SETTING_EFFECTS,0) = "Effects: "
 	gSettingTexts(SETTING_EFFECTS,1) = "OFF"
 	gSettingTexts(SETTING_EFFECTS,2) = "ON"
+	gSettingTexts(SETTING_SUFFLE,0) = "Suffle music: "
+	gSettingTexts(SETTING_SUFFLE,1) = "OFF"
+	gSettingTexts(SETTING_SUFFLE,2) = "ON"
 
 //Pausevalikon tekstit
 Dim gPauseTexts(2) As String
@@ -279,4 +287,4 @@ Dim gMenuTexts(3) As String
 	gMenuTexts(3) = "Exit game"
 	
 //ƒ‰net
-Dim gSounds(SND_AMOUNT - 1)
+Dim gSounds(SND_AMOUNT - 1,1)

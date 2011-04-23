@@ -8,32 +8,41 @@ Function LoadSounds()
 			
 			Select attr$
 				Case "explosion"
-					If gSounds(SND_EXPLOSION) = 0
-						gSounds(SND_EXPLOSION) = MakeMEMBlock(4)
+					If gSounds(SND_EXPLOSION,SND_MEM) = 0
+						gSounds(SND_EXPLOSION,SND_MEM) = MakeMEMBlock(4)
 					Else
-						ResizeMEMBlock gSounds(SND_EXPLOSION),MEMBlockSize(gSounds(SND_EXPLOSION)) + 4
+						ResizeMEMBlock gSounds(SND_EXPLOSION,SND_MEM),MEMBlockSize(gSounds(SND_EXPLOSION,SND_MEM)) + 4
 					EndIf
 					
 					tmpSound = LoadSound(file$)
-					PokeInt gSounds(SND_EXPLOSION),MEMBlockSize(gSounds(SND_EXPLOSION)) - 4,tmpSound
+					PokeInt gSounds(SND_EXPLOSION,SND_MEM),MEMBlockSize(gSounds(SND_EXPLOSION,SND_MEM)) - 4,tmpSound
 				Case "shoot"
-					If gSounds(SND_SHOOT) = 0
-						gSounds(SND_SHOOT) = MakeMEMBlock(4)
+					If gSounds(SND_SHOOT,SND_MEM) = 0
+						gSounds(SND_SHOOT,SND_MEM) = MakeMEMBlock(4)
 					Else
-						ResizeMEMBlock gSounds(SND_SHOOT),MEMBlockSize(gSounds(SND_SHOOT)) + 4
+						ResizeMEMBlock gSounds(SND_SHOOT,SND_MEM),MEMBlockSize(gSounds(SND_SHOOT,SND_MEM)) + 4
 					EndIf
 					
 					tmpSound = LoadSound(file$)
-					PokeInt gSounds(SND_SHOOT),MEMBlockSize(gSounds(SND_SHOOT)) - 4,tmpSound
+					PokeInt gSounds(SND_SHOOT,SND_MEM),MEMBlockSize(gSounds(SND_SHOOT,SND_MEM)) - 4,tmpSound
 				Case "hit"
-					If gSounds(SND_HIT) = 0
-						gSounds(SND_HIT) = MakeMEMBlock(4)
+					If gSounds(SND_HIT,SND_MEM) = 0
+						gSounds(SND_HIT,SND_MEM) = MakeMEMBlock(4)
 					Else
-						ResizeMEMBlock gSounds(SND_HIT),MEMBlockSize(gSounds(SND_HIT)) + 4
+						ResizeMEMBlock gSounds(SND_HIT,SND_MEM),MEMBlockSize(gSounds(SND_HIT,SND_MEM)) + 4
 					EndIf
 					
 					tmpSound = LoadSound(file$)
-					PokeInt gSounds(SND_HIT),MEMBlockSize(gSounds(SND_HIT)) - 4,tmpSound
+					PokeInt gSounds(SND_HIT,SND_MEM),MEMBlockSize(gSounds(SND_HIT,SND_MEM)) - 4,tmpSound
+				Case "music"
+					If gSounds(SND_MUSIC,SND_MEM) = 0
+						gSounds(SND_MUSIC,SND_MEM) = MakeMEMBlock(4)
+					Else
+						ResizeMEMBlock gSounds(SND_MUSIC,SND_MEM),MEMBlockSize(gSounds(SND_MUSIC,SND_MEM)) + 4
+					EndIf
+					
+					tmpSound = LoadSound(file$)
+					PokeInt gSounds(SND_MUSIC,SND_MEM),MEMBlockSize(gSounds(SND_MUSIC,SND_MEM)) - 4,tmpSound
 			EndSelect
 		Wend
 	CloseFile f
@@ -41,8 +50,27 @@ EndFunction
 
 //Soittaa ‰‰nen. Jos vaihtoehtoja on monta, soitetaan satunnaisesti
 Function PlaySound2(snd)
-	If gSounds(snd) <> 0
-		tmpAmount = MEMBlockSize(gSounds(snd)) / 4
-		PlaySound PeekInt(gSounds(snd),Rand(tmpAmount - 1) * 4),gSettings(SETTING_SVOLUME)
+	If snd = SND_MUSIC
+		volume = gSettings(SETTING_MVOLUME)
+	Else
+		volume = gSettings(SETTING_SVOLUME)
+	EndIf
+	
+	If gSounds(snd,SND_MEM) <> 0
+		tmpAmount = MEMBlockSize(gSounds(snd,SND_MEM)) / 4
+		gSounds(snd,SND_CHANNEL) = PlaySound(PeekInt(gSounds(snd,SND_MEM),Rand(tmpAmount - 1) * 4),volume)
 	EndIf
 EndFunction
+
+//Tarkistaa soiko ‰‰ni
+Function SoundPlaying2(snd)
+	If SoundPlaying(gSounds(snd,SND_CHANNEL))
+		Return True
+	EndIf
+EndFunction
+
+//Lopettaa ‰‰nen soiton
+Function StopSound2(snd)
+	StopSound gSounds(snd,SND_CHANNEL)
+EndFunction
+	
