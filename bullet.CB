@@ -31,9 +31,6 @@ Function UpdateBullets()
 				eAir = IsAirEnemy(iEnemy\id)
 				
 				If Distance(iBullet\x,iBullet\y,iEnemy\x,iEnemy\y) <= iEnemy\size
-					//ƒ‰ni
-					PlaySound2(SND_HIT)
-					
 					//Tarkistetaan onko ammuksessa erikoisominaisuuksia
 					If iBullet\special <> 0 And iEnemy\cond = 0
 						For i = 0 To MEMBlockSize(iBullet\special) - 2 Step 2
@@ -93,6 +90,9 @@ Function UpdateBullets()
 						If gSettings(SETTING_EFFECTS) = 1
 							Explosion(iEnemy\x,iEnemy\y,30,60,300,iEnemy\clr)
 						EndIf
+						
+						//R‰j‰hdys‰‰ni
+						PlaySound2(SND_EXPLOSION)
 						
 						//Rahan lis‰ys
 						gMoney = gMoney + iEnemy\reward

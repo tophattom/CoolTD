@@ -16,8 +16,6 @@ Function Explosion(x,y,pAmount,size,speed As Float,clr)
 			
 			nPar\clr = clr
 	Next i
-	
-	PlaySound2(SND_EXPLOSION)
 EndFunction
 
 //Partikkelien päivitys
@@ -35,7 +33,12 @@ EndFunction
 //Partikkelien piirto
 Function DrawParticles()
 	For iPar.PARTICLE = Each PARTICLE
-		Color PeekByte(iPar\clr,0),PeekByte(iPar\clr,1),PeekByte(iPar\clr,2)
+		If iPar\clr <> 0
+			Color PeekByte(iPar\clr,0),PeekByte(iPar\clr,1),PeekByte(iPar\clr,2)
+		Else
+			Color 255,Rand(255),0
+		EndIf
+		
 		Circle iPar\x - 1,iPar\y - 1,2
 		'Dot iPar\x,iPar\y
 	Next iPar

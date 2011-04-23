@@ -193,6 +193,32 @@ Function UpdateEnemies()
 			EndIf
 		EndIf
 		
+		//Tuli
+		If iEnemy\cond = SPECIAL_FIRE
+			iEnemy\hp = iEnemy\hp - 2
+			
+			If gSettings(SETTING_EFFECTS) = 1	
+				For i = 0 To 1
+					nPar.PARTICLE = New(PARTICLE)
+						ang = Rand(360)
+						speed = 70 + Rand(-50,20)
+						
+						nPar\x = iEnemy\x + Cos(ang) * (iEnemy\size / 2)
+						nPar\y = iEnemy\y - Sin(ang) * (iEnemy\size / 2)
+						
+						nPar\startX = iEnemy\x
+						nPar\startY = iEnemy\y
+						
+						
+						nPar\xPlus = Cos(ang) * speed
+						nPar\yPlus = -Sin(ang) * speed
+						
+						nPar\range = 20 + Rand(-10,5)
+				Next i
+			EndIf
+		EndIf
+						
+		
 		//Tilan poisto
 		If iEnemy\cond <> 0
 			If Timer() > iEnemy\condStart + iEnemy\condTime

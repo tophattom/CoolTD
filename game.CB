@@ -86,7 +86,7 @@ Function Run()
 		If gSettings(SETTING_EFFECTS) = 1
 			UpdateParticles()
 			DrawParticles()
-		endif
+		EndIf
 		
 		If gShowBuildMenu = True
 			BuildMenu(0,0)
