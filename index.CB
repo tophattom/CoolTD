@@ -20,4 +20,5 @@ SCREEN gScreenW,gScreenH
 
 LoadSettings()
 LoadSounds()
+LoadMusic()
 MainMenu()

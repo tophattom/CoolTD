@@ -34,32 +34,70 @@ Function LoadSounds()
 					
 					tmpSound = LoadSound(file$)
 					PokeInt gSounds(SND_HIT,SND_MEM),MEMBlockSize(gSounds(SND_HIT,SND_MEM)) - 4,tmpSound
-				Case "music"
-					If gSounds(SND_MUSIC,SND_MEM) = 0
-						gSounds(SND_MUSIC,SND_MEM) = MakeMEMBlock(4)
-					Else
-						ResizeMEMBlock gSounds(SND_MUSIC,SND_MEM),MEMBlockSize(gSounds(SND_MUSIC,SND_MEM)) + 4
-					EndIf
-					
-					tmpSound = LoadSound(file$)
-					PokeInt gSounds(SND_MUSIC,SND_MEM),MEMBlockSize(gSounds(SND_MUSIC,SND_MEM)) - 4,tmpSound
 			EndSelect
 		Wend
 	CloseFile f
 EndFunction
 
+//Lataa musiikit
+Function LoadMusic()
+	ClearArray OFF
+	ext$ = "raw m"+"od s3m xm it m"+"id rmi wav mp2 mp3 ogg wma asf mo3"
+	ChDir "music"
+	
+	StartSearch
+		Repeat
+			found = False
+			
+			tmpFile$ = FindFile()
+			
+			If tmpFile$ = ""
+				Exit
+			EndIf
+			
+			If tmpFile$ <> ".." And tmpFile$ <> "."
+				For i = 1 To CountWords(ext$)	//K‰yd‰‰n kaikki tuetut formaatit l‰pi
+					If Lower(Trim(Right(tmpFile$,3))) = Trim(GetWord(ext$,i))
+						found = True
+					EndIf
+				Next i
+				
+				If found = True
+					gMusicAmount = gMusicAmount + 1
+					ReDim gMusic(gMusicAmount + 1)
+					gMusic(gMusicAmount) = "music/" + tmpFile$
+				EndIf
+			EndIf
+		Forever
+	EndSearch
+
+	ChDir ".."
+EndFunction
+
 //Soittaa ‰‰nen. Jos vaihtoehtoja on monta, soitetaan satunnaisesti
 Function PlaySound2(snd)
-	If snd = SND_MUSIC
-		volume = gSettings(SETTING_MVOLUME)
-	Else
-		volume = gSettings(SETTING_SVOLUME)
-	EndIf
+	volume = gSettings(SETTING_SVOLUME)
 	
 	If gSounds(snd,SND_MEM) <> 0
 		tmpAmount = MEMBlockSize(gSounds(snd,SND_MEM)) / 4
 		gSounds(snd,SND_CHANNEL) = PlaySound(PeekInt(gSounds(snd,SND_MEM),Rand(tmpAmount - 1) * 4),volume)
 	EndIf
+EndFunction
+
+//Soittaa seuraavan musiikin
+Function PlayNextMusic()
+	If gSettings(SETTING_SUFFLE) = 0
+		nextMusic = gCurrentMusic + 1
+		
+		If nextMusic > gMusicAmount
+			nextMusic = 1
+		EndIf
+	Else
+		nextMusic = Rand(1,gMusicAmount)
+	EndIf
+	
+	gMusicChannel = PlaySound(gMusic(nextMusic),gSettings(SETTING_MVOLUME))
+	gCurrentMusic = nextMusic
 EndFunction
 
 //Tarkistaa soiko ‰‰ni
@@ -72,5 +110,12 @@ EndFunction
 //Lopettaa ‰‰nen soiton
 Function StopSound2(snd)
 	StopSound gSounds(snd,SND_CHANNEL)
+EndFunction
+
+//Tulostaa kaikki musiikit
+Function PrintMusic()
+	For i = 1 To gMusicAmount
+		Print gMusic(i)
+	Next i
 EndFunction
 	

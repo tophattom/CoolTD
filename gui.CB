@@ -142,7 +142,6 @@ EndFunction
 
 //P‰‰valikko
 Function MainMenu()
-
 	Repeat
 		DrawGrid()
 
@@ -278,6 +277,8 @@ Function SettingsMenu()
 		ElseIf def = 2
 			DefaultSettings()
 		EndIf
+		
+		SetSound gMusicChannel,OFF,gSettings(SETTING_MVOLUME)
 		
 		DrawScreen
 	Until KeyHit(cbKeyEsc)

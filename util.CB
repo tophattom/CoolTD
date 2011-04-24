@@ -207,9 +207,8 @@ Const SND_SHOOT = 1
 Const SND_HIT = 2
 Const SND_FREEZE = 3
 Const SND_IGNITE = 4
-Const SND_MUSIC = 5
 //Määrä
-Const SND_AMOUNT = 6
+Const SND_AMOUNT = 5
 //Toisen ulottuvuuden vakiot
 Const SND_MEM = 0
 Const SND_CHANNEL = 1
@@ -251,7 +250,11 @@ Global gShowBuildMenu	//Näytetäänkö rakennusvalikko
 Global gLoopTime As Float
 Global gLoopStart
 Global gLastSpawn		//Viimeinen spawnaus
-Global gTest
+
+Global gCurrentMusic	//Nykyisen musiikin numero
+Global gMusicChannel	//Musiikin kanavamuuttuja
+Global gMusicAmount		//Musiikkien määrä
+	gMusicAmount = 0
 
 
 //Waypointit
@@ -288,3 +291,5 @@ Dim gMenuTexts(3) As String
 	
 //Äänet
 Dim gSounds(SND_AMOUNT - 1,1)
+//Musiikit
+Dim gMusic(gMusicAmount + 1) As String
