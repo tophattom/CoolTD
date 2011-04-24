@@ -206,7 +206,7 @@ Const SND_EXPLOSION = 0
 Const SND_SHOOT = 1
 Const SND_HIT = 2
 Const SND_FREEZE = 3
-Const SND_IGNITE = 4
+Const SND_FIRE = 4
 //M‰‰r‰
 Const SND_AMOUNT = 5
 //Toisen ulottuvuuden vakiot

@@ -216,12 +216,20 @@ Function UpdateEnemies()
 						nPar\range = 20 + Rand(-10,5)
 				Next i
 			EndIf
+			
+			If Not SoundPlaying2(SND_FIRE)
+				PlaySound2(SND_FIRE)
+			EndIf
 		EndIf
 						
 		
 		//Tilan poisto
 		If iEnemy\cond <> 0
 			If Timer() > iEnemy\condStart + iEnemy\condTime
+				If iEnemy\cond = SPECIAL_FIRE
+					StopSound2(SND_FIRE)
+				EndIf
+				
 				iEnemy\cond = 0
 			EndIf
 		EndIf

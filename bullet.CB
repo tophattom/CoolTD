@@ -91,6 +91,11 @@ Function UpdateBullets()
 							Explosion(iEnemy\x,iEnemy\y,30,60,300,iEnemy\clr)
 						EndIf
 						
+						//Loptetaan mahdollinen tuli‰‰ni
+						If iEnemy\cond = SPECIAL_FIRE
+							StopSound2(SND_FIRE)
+						endif
+						
 						//R‰j‰hdys‰‰ni
 						PlaySound2(SND_EXPLOSION)
 						
