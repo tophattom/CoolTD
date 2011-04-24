@@ -41,10 +41,10 @@ EndFunction
 
 //Lataa musiikit
 Function LoadMusic()
-	ClearArray OFF
 	ext$ = "raw m"+"od s3m xm it m"+"id rmi wav mp2 mp3 ogg wma asf mo3"
 	ChDir "music"
 	
+	//Lasketaan musiikit, koska taulukko pit‰‰ venytt‰‰ etuk‰teen
 	StartSearch
 		Repeat
 			found = False
@@ -64,8 +64,36 @@ Function LoadMusic()
 				
 				If found = True
 					gMusicAmount = gMusicAmount + 1
-					ReDim gMusic(gMusicAmount + 1)
-					gMusic(gMusicAmount) = "music/" + tmpFile$
+				EndIf
+			EndIf
+		Forever
+	EndSearch
+	
+	//Venytet‰‰n taulukko
+	ReDim gMusic(gMusicAmount)
+	k = 1
+	
+	//Haetaan musiikkien polut
+	StartSearch
+		Repeat
+			found = False
+			
+			tmpFile$ = FindFile()
+			
+			If tmpFile$ = ""
+				Exit
+			EndIf
+			
+			If tmpFile$ <> ".." And tmpFile$ <> "."
+				For i = 1 To CountWords(ext$)	//K‰yd‰‰n kaikki tuetut formaatit l‰pi
+					If Lower(Trim(Right(tmpFile$,3))) = Trim(GetWord(ext$,i))
+						found = True
+					EndIf
+				Next i
+				
+				If found = True
+					gMusic(k) = "music/" + tmpFile$
+					k = k + 1
 				EndIf
 			EndIf
 		Forever
@@ -86,6 +114,10 @@ EndFunction
 
 //Soittaa seuraavan musiikin
 Function PlayNextMusic()
+	If SoundPlaying(gMusicChannel)
+		StopSound gMusicChannel
+	EndIf
+	
 	If gSettings(SETTING_SUFFLE) = 0
 		nextMusic = gCurrentMusic + 1
 		

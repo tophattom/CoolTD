@@ -142,7 +142,7 @@ EndFunction
 
 //P‰‰valikko
 Function MainMenu()
-	Repeat
+	Repeat		
 		DrawGrid()
 
 		Color 0,255,0
