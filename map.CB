@@ -254,8 +254,11 @@ Function ClearPath()
 EndFunction
 
 //Tallentaa reitin tiedostoon
-Function SavePath(number)
-	f = OpenToWrite("Data/" + number + ".lvl")
+Function SavePath()
+	f = OpenToEdit("Data/levels.dat")
+		SeekFile f,FileSize("Data/levels.dat")
+		
+		WriteByte f,PATH_START
 		WriteByte f,gWaypointAmount
 		
 		For i = 1 To gWaypointAmount
@@ -263,24 +266,43 @@ Function SavePath(number)
 			WriteByte f,gWaypoints(i,WP_Y)
 			WriteByte f,gWaypoints(i,WP_DIR)
 		Next i
+		
+		WriteByte f,PATH_END
 	CloseFile f
 EndFunction
 
 //Lataa reitin tiedostosta
 Function LoadPath(number)
 	ClearArray ON
+	done = False
+	tmpLvl = 0
 	
-	If FileExists("Data/" + number + ".lvl") Then
-		f = OpenToRead("Data/" + number + ".lvl")
-			gWaypointAmount = ReadByte(f)
-			
-			ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
-			
-			For i = 1 To gWaypointAmount
-				gWaypoints(i,WP_X) = ReadByte(f)
-				gWaypoints(i,WP_Y) = ReadByte(f)
-				gWaypoints(i,WP_DIR) = ReadByte(f)
-			Next i
+	If FileExists("Data/levels.dat")
+		f = OpenToEdit("Data/levels.dat")
+			While done = False
+				tmpByte = ReadByte(f)
+				
+				If tmpByte = PATH_START
+					tmpLvl = tmpLvl + 1
+					
+					If tmpLvl = number
+						gWaypointAmount = ReadByte(f)
+						
+						ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+						
+						For i = 1 To gWaypointAmount
+							gWaypoints(i,WP_X) = ReadByte(f)
+							gWaypoints(i,WP_Y) = ReadByte(f)
+							gWaypoints(i,WP_DIR) = ReadByte(f)
+						Next i
+						
+						done = True
+					Else
+						amount = ReadByte(f)
+						SeekFile f,FileOffset(f) + amount * 3 + 1
+					EndIf
+				EndIf
+			Wend
 		CloseFile f
 		
 		Return True

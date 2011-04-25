@@ -193,9 +193,20 @@ Function UpdateEnemies()
 			EndIf
 		EndIf
 		
+		//Tilan poisto
+		If iEnemy\cond <> 0
+			If Timer() > iEnemy\condStart + iEnemy\condTime
+				If iEnemy\cond = SPECIAL_FIRE
+					StopSound2(SND_FIRE)
+				EndIf
+				
+				iEnemy\cond = 0
+			EndIf
+		EndIf
+		
 		//Tuli
 		If iEnemy\cond = SPECIAL_FIRE
-			iEnemy\hp = iEnemy\hp - 2
+			iEnemy\hp = iEnemy\hp - 60 * (gLoopTime / 1000)
 			
 			If gSettings(SETTING_EFFECTS) = 1	
 				For i = 0 To 1
@@ -217,20 +228,12 @@ Function UpdateEnemies()
 				Next i
 			EndIf
 			
+			If iEnemy\hp <= 0
+				Delete iEnemy
+			EndIf
+			
 			If Not SoundPlaying2(SND_FIRE)
 				PlaySound2(SND_FIRE)
-			EndIf
-		EndIf
-						
-		
-		//Tilan poisto
-		If iEnemy\cond <> 0
-			If Timer() > iEnemy\condStart + iEnemy\condTime
-				If iEnemy\cond = SPECIAL_FIRE
-					StopSound2(SND_FIRE)
-				EndIf
-				
-				iEnemy\cond = 0
 			EndIf
 		EndIf
 	Next iEnemy

@@ -23,8 +23,8 @@ Type ENEMY
 	
 	Field speed As Float
 	
-	Field hp
-	Field maxHp
+	Field hp As Float
+	Field maxHp As float
 	
 	Field dir As Byte
 	
@@ -157,6 +157,10 @@ Const WP_Y = 1
 Const WP_DIR = 2
 //Waypointtien ominaisuuksien kokonaism‰‰r‰
 Const WP_PROPERTIES = 3
+
+//Vakiota reitin tallennusta varten
+Const PATH_START = 255
+Const PATH_END = 254
 
 //Vakiot aaltojen ominaisuuksille
 Const GROUP_WAVE = 0

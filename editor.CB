@@ -24,7 +24,7 @@ Function Editor()
 		EndIf
 		
 		If KeyHit(cbKeyS)
-			SavePath(1)
+			SavePath()
 		ElseIf KeyHit(cbKeyL)
 			LoadPath(1)
 		ElseIf KeyHit(cbKeyC)
