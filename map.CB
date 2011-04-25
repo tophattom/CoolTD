@@ -256,7 +256,19 @@ EndFunction
 //Tallentaa reitin tiedostoon
 Function SavePath()
 	f = OpenToEdit("Data/levels.dat")
-		SeekFile f,FileSize("Data/levels.dat")
+		If FileSize("Data/levels.dat") > 0
+			tmpAmount = ReadInt(f)
+			tmpAmount = tmpAmount + 1
+		Else
+			tmpAmount = 1
+		EndIf
+		
+		//Kirjoitetaan uusi määrä tiedoston alkuun
+		SeekFile f,0
+		WriteInt f,tmpAmount
+		
+		//Uusi reitti tiedoston loppuun
+		SeekFile f,FileSize("Data/levels.dat") + 4
 		
 		WriteByte f,PATH_START
 		WriteByte f,gWaypointAmount
@@ -279,6 +291,12 @@ Function LoadPath(number)
 	
 	If FileExists("Data/levels.dat")
 		f = OpenToEdit("Data/levels.dat")
+			pathAmount = ReadInt(f)
+
+			If number > pathAmount
+				Return False
+			EndIf
+			
 			While done = False
 				tmpByte = ReadByte(f)
 				
@@ -311,8 +329,17 @@ Function LoadPath(number)
 	EndIf
 EndFunction
 
+//Palauttaa reittien määrän
+Function GetPathAmount()
+	f = OpenToRead("Data/levels.dat")
+		tmp = ReadInt(f)
+	CloseFile f
+	
+	Return tmp
+EndFunction
+
 //Luo satunnaisen retitin
-Function RandomPath(maxDist = 7,minAmount = 15)
+Function RandomPath(minDist=1,maxDist = 7,minAmount = 15)
 	//Aloituskohta
 	Repeat
 		startX = Rand(0,GRID_W - 1)
@@ -350,10 +377,9 @@ Function RandomPath(maxDist = 7,minAmount = 15)
 			nextY = Rand(minY,maxY)
 		EndIf
 		
-		If CheckTile(nextX,nextY)
+		If CheckTile(nextX,nextY) And (Abs(tmpX - nextX) >= minDist Or Abs(tmpY - nextY) >= minDist)
 			AddWaypoint(nextX,nextY)
 			SetWaypointDir(gWaypointAmount - 1)
 		EndIf
 	Wend
 EndFunction
-

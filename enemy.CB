@@ -230,6 +230,7 @@ Function UpdateEnemies()
 			
 			If iEnemy\hp <= 0
 				Delete iEnemy
+				gEnemyAmount = gEnemyAmount - 1
 			EndIf
 			
 			If Not SoundPlaying2(SND_FIRE)
