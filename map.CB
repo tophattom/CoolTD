@@ -331,15 +331,19 @@ EndFunction
 
 //Palauttaa reittien m‰‰r‰n
 Function GetPathAmount()
-	f = OpenToRead("Data/levels.dat")
-		tmp = ReadInt(f)
-	CloseFile f
-	
-	Return tmp
+	If FileExists("Data/levels.dat")
+		f = OpenToRead("Data/levels.dat")
+			tmp = ReadInt(f)
+		CloseFile f
+		
+		Return tmp
+	Else
+		Return 0
+	EndIf
 EndFunction
 
 //Luo satunnaisen retitin
-Function RandomPath(minDist=1,maxDist = 7,minAmount = 15)
+Function RandomPath(minDist=2,maxDist = 7,minAmount = 15)
 	//Aloituskohta
 	Repeat
 		startX = Rand(0,GRID_W - 1)

@@ -187,6 +187,8 @@ Const SPECIAL_TRANSFORM = 5	//Muuttuva vihollinen
 Const SPAWN_INTERVAL = 500
 //Aika aaltojen v‰liss‰
 Const WAVE_INTERVAL = 2000
+//Kauanko pit‰‰ odottaa aaltojen v‰lill‰
+Const WAIT_TIME = 10000
 
 //Vakiot setuksille
 Const SETTING_MVOLUME = 0

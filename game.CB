@@ -20,11 +20,10 @@ Function InitGame()
 	
 	gCurrentWave = 0
 	gCurrentGroup = 1
+	gSpawned = true
 	
 	gMoney = 300
-	
-	LoadPath(1)
-	'RandomPath()
+	gLives = 20
 EndFunction 
 
 //Pääohjelma
@@ -57,7 +56,9 @@ Function Run()
 		
 		If KeyHit(cbKeyB)
 			gShowBuildMenu = Not gShowBuildMenu
-		ElseIf KeyHit(cbKeySpace) And gEnemyAmount = 0
+		ElseIf KeyHit(cbKeySpace) And Timer() > gLastSpawn + WAIT_TIME
+			gLastSpawn = Timer()
+			
 			gSpawned = False
 			gCurrentWave = gCurrentWave + 1
 			
@@ -96,9 +97,13 @@ Function Run()
 			TowerInfo(gSelectedTower)
 		EndIf
 		
-		If gEnemyAmount = 0
-			Color 0,Abs(Sin(Timer() / 9)) * 255,0
+		//Infoteksti
+		Color 0,Abs(Sin(Timer() / 9)) * 255,0
+			
+		If Timer() > gLastSpawn + WAIT_TIME
 			CenterText gScreenW / 2,GRID_SIZE / 2,"Press SPACE t"+"o spawn n"+"ew wave",2
+		Else
+			CenterText gScreenW / 2,GRID_SIZE / 2,10 - RoundDown((Timer() - gLastSpawn) / 1000),2
 		EndIf
 		
 		If gLives = 0	//Elämät loppu -> game over
