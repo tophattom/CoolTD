@@ -290,7 +290,7 @@ Function LevelMenu()
 	ClearMouse
 	
 	lvlAmount = GetPathAmount()
-	rows = RoundDown(lvlAmount / 4)
+	rows = RoundUp(lvlAmount / 4)
 	
 	Repeat
 		i = 0
@@ -300,7 +300,7 @@ Function LevelMenu()
 		Color 0,255,0
 		CenterText gScreenW / 2,30,"Select level"
 		
-		For row = 0 To rows
+		For row = 1 To rows
 			For col = -2 To 1
 				i = i + 1
 				
@@ -309,7 +309,7 @@ Function LevelMenu()
 				EndIf
 				
 				Color 0,255,0
-				tmp = Button(gScreenW / 2 + 5 + col * (TextWidth(i) + 20),100 + 37 * row,i)
+				tmp = Button(gScreenW / 2 + 5 + col * (TextWidth(i) + 20),100 + 37 * (row - 1),i)
 				
 				If tmp = 2
 					LoadPath(i)
@@ -320,9 +320,9 @@ Function LevelMenu()
 		Next row
 		
 		Color 0,255,0
-		random = Button(gScreenW / 2,100 + (rows + 1) * 37,"Generate level",1)
+		random = Button(gScreenW / 2,100 + (rows) * 37,"Generate level",1)
 		Color 0,255,0
-		back = Button(gScreenW / 2,100 + (rows + 2) * 37,"Back",1)
+		back = Button(gScreenW / 2,100 + (rows + 1) * 37,"Back",1)
 		
 		If random = 2
 			RandomPath()
@@ -330,7 +330,7 @@ Function LevelMenu()
 			Run()
 		ElseIf back = 2
 			Exit
-		endif
+		EndIf
 		
 		DrawScreen
 	Until KeyHit(cbKeyEsc)
