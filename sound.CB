@@ -60,7 +60,7 @@ EndFunction
 //Lataa musiikit
 Function LoadMusic()
 	ext$ = "raw m"+"od s3m xm it m"+"id rmi wav mp2 mp3 ogg wma asf mo3"
-    origDir$ = CurrentDir()
+	origDir$ = CurrentDir()
 	ChDir "music"
 	
 	//Lasketaan musiikit, koska taulukko pit‰‰ venytt‰‰ etuk‰teen
