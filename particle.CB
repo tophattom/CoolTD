@@ -43,3 +43,10 @@ Function DrawParticles()
 		'Dot iPar\x,iPar\y
 	Next iPar
 EndFunction
+
+//Poistaa partikkelit
+Function ClearParticles()
+	For iPar.PARTICLE = Each PARTICLE
+		Delete iPar
+	Next iPar
+endfunction

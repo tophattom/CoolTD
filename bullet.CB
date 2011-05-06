@@ -121,3 +121,10 @@ Function DrawBullets()
 		Circle iBullet\x - 1,iBullet\y - 1,2,1
 	Next iBullet
 EndFunction
+
+//Poistaa kaikki ammukset
+Function ClearBullets()
+	For iBullet.BULLET = Each BULLET
+		Delete iBullet
+	Next iBullet
+endfunction
