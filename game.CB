@@ -1,6 +1,6 @@
 //Alustaa pelin ja lataa kaiken tarvittavan
 Function InitGame()
-	If FileExists("Data/settings.dat")
+	If FileExists("data/settings.dat")
 		LoadSettings()
 	Else
 		DefaultSettings()
@@ -139,7 +139,7 @@ EndFunction
 
 //Tallentaa asetukset
 Function SaveSettings()
-	f = OpenToWrite("Data/settings.dat")
+	f = OpenToWrite("data/settings.dat")
 		For i = 0 To SETTINGS_AMOUNT - 1
 			WriteByte f,gSettings(i)
 		Next i
@@ -148,9 +148,11 @@ EndFunction
 
 //Lataa asetukset
 Function LoadSettings()
-	f = OpenToRead("Data/settings.dat")
-		For i = 0 To SETTINGS_AMOUNT - 1
-			gSettings(i) = ReadByte(f)
-		Next i
-	CloseFile f
+	If FileExists("data/settings.dat") Then
+		f = OpenToRead("data/settings.dat")
+			For i = 0 To SETTINGS_AMOUNT - 1
+				gSettings(i) = ReadByte(f)
+			Next i
+		CloseFile f
+	EndIf
 EndFunction
