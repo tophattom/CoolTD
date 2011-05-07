@@ -38,17 +38,16 @@ Function BuildMenu(x,y)
 		tmpX = (x + 5)
 		tmpY = (y + 5) + i * (GRID_SIZE * 2.5)
 		
-		If gShowBuildMenu = True
-			If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
-				Color 128,0,0
-				Box tmpX,tmpY,GRID_SIZE,GRID_SIZE,0
-				
-				If MouseHit(1)
-					gPlaceTower = True
-					gSelectedTower = iType\id
-					gShowBuildMenu = False
-					Exit
-				EndIf
+		If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
+			Color 128,0,0
+			Box tmpX,tmpY,GRID_SIZE,GRID_SIZE,0
+			
+			If MouseHit(1)
+				gPlaceTower = True
+				gSelectedTower = iType\id
+				gShowBuildMenu = False
+				ClearMouse
+				Exit
 			EndIf
 		EndIf
 		
@@ -440,4 +439,3 @@ Function ClickText(x,y,t$)
 	
 	Return hover + MouseHit(1)
 EndFunction
-	
