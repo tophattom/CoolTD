@@ -141,7 +141,7 @@ Function DefaultSettings()
 	gSettings(SETTING_MVOLUME) = 100
 	gSettings(SETTING_SVOLUME) = 100
 	gSettings(SETTING_EFFECTS) = 1
-	gSettings(SETTING_SUFFLE) = 0
+	gSettings(SETTING_SHUFFLE) = 0
 	
 	SaveSettings()
 EndFunction
