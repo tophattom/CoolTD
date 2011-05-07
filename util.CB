@@ -195,7 +195,7 @@ Const WAIT_TIME = 10000
 //Vakiot setuksille
 Const SETTING_MVOLUME = 0
 Const SETTING_SVOLUME = 1
-Const SETTING_SUFFLE = 2
+Const SETTING_SHUFFLE = 2
 Const SETTING_EFFECTS = 3
 //M‰‰r‰
 Const SETTINGS_AMOUNT = 4
@@ -280,9 +280,9 @@ Dim gSettingTexts(SETTINGS_AMOUNT - 1,2) As String
 	gSettingTexts(SETTING_EFFECTS,0) = "Effects: "
 	gSettingTexts(SETTING_EFFECTS,1) = "OFF"
 	gSettingTexts(SETTING_EFFECTS,2) = "ON"
-	gSettingTexts(SETTING_SUFFLE,0) = "Suffle music: "
-	gSettingTexts(SETTING_SUFFLE,1) = "OFF"
-	gSettingTexts(SETTING_SUFFLE,2) = "ON"
+	gSettingTexts(SETTING_SHUFFLE,0) = "Shuffle music: "
+	gSettingTexts(SETTING_SHUFFLE,1) = "OFF"
+	gSettingTexts(SETTING_SHUFFLE,2) = "ON"
 
 //Pausevalikon tekstit
 Dim gPauseTexts(2) As String

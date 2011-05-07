@@ -137,7 +137,7 @@ Function PlayNextMusic()
 		StopSound gMusicChannel
 	EndIf
 	
-	If gSettings(SETTING_SUFFLE) = 0
+	If gSettings(SETTING_SHUFFLE) = 0
 		nextMusic = gCurrentMusic + 1
 		
 		If nextMusic > gMusicAmount

@@ -1,4 +1,10 @@
-//Piirtää rakennuslaatiko
+//================================================================================
+// Rakennusvalikon piirto, parametreina valikon vasemman yläkulman x- ja y-koord.
+// Asettaa tornin valitsemisen yhteydessä tietoja kolmeen globaaliin muuttujaan:
+//   - gPlaceTower = True
+//   - gSelectedTower = Valitun tornin ID
+//   - gShowBuildMenu = False
+//================================================================================
 Function BuildMenu(x,y)
 	i = 0
 	maxWidth = 0
@@ -31,16 +37,17 @@ Function BuildMenu(x,y)
 	For iType.TOWERTYPE = Each TOWERTYPE
 		tmpX = (x + 5)
 		tmpY = (y + 5) + i * (GRID_SIZE * 2.5)
-		
-		If gShowBuildMenu = True And gMoney >= iType\price	//Tornin voi valita vain jos ON rahaa
+
+		If gMoney >= iType\price	//Tornin voi valita vain jos ON rahaa
 			If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
 				Color 128,0,0
 				Box tmpX,tmpY,GRID_SIZE,GRID_SIZE,0
-				
+
 				If MouseHit(1)
 					gPlaceTower = True
 					gSelectedTower = iType\id
 					gShowBuildMenu = False
+					ClearMouse
 					Exit
 				EndIf
 			EndIf
@@ -84,7 +91,9 @@ Function BuildMenu(x,y)
 	Next iType
 EndFunction
 
-//Piirtää tornin infolaatikon
+//================================================================================
+// Piirtää tornin infolaatikon tornin ID:n perusteella.
+//================================================================================
 Function TowerInfo(towerId)
 	tTower.TOWER = ConvertToType(towerId)
 
@@ -174,7 +183,9 @@ Function TowerInfo(towerId)
 	EndIf
 EndFunction
 
-//Päävalikko
+//================================================================================
+// Päävalikon piirto ja muu toiminnallisuus.
+//================================================================================
 Function MainMenu()
 	Repeat		
 		DrawGrid()
@@ -209,7 +220,10 @@ Function MainMenu()
 	Forever
 EndFunction	
 
-//Piirtää pausevalikon
+//================================================================================
+// Pausevalikon piirto. Palauttaa True, jos halutaan jatkaa peliä, False jos
+// peli halutaan pistää poikki.
+//================================================================================
 Function PauseMenu()
 	//Tallennetaan nykyinen tilanne kuvaan
 	tmpImg = MakeImage(gScreenW,gScreenH)
@@ -240,7 +254,8 @@ Function PauseMenu()
 			If tmp = 2
 				Select i
 					Case 0
-						gLoopStart = Timer()
+						// Alustetaan FPS-riippumattomuuden ajastin
+						gLoopStart = Timer() 
 						Return True
 					Case 1
 						SettingsMenu()
@@ -257,7 +272,10 @@ Function PauseMenu()
 	Return true
 EndFunction
 
-//Asetusvalikko
+//================================================================================
+// Valikon osa, asetukset. Ei palauta mitään arvoa. Sopii kutsuttavaksi myös
+// kesken pelin, kuten yllä olevassa PauseMenu-funktiossa tehdäänkin.
+//================================================================================
 Function SettingsMenu()
 	//Tallennetaan nykyinen tilanne kuvaan
 	tmpImg = MakeImage(gScreenW,gScreenH)
@@ -319,7 +337,9 @@ Function SettingsMenu()
 	SaveSettings()
 EndFunction
 
-//Kentänvalintaruutu
+//================================================================================
+// Valikon osa, kentänvalintaruutu. Ei palauta mitään arvoa.
+//================================================================================
 Function LevelMenu()
 	ClearMouse
 	
@@ -371,7 +391,15 @@ Function LevelMenu()
 	Until KeyHit(cbKeyEsc)
 EndFunction
 
-//Piirtää napin
+//================================================================================
+// Funktio napin piirtämistä varten. Parametrit:
+//   * 1&2: Napin vasemman yläkulman x- ja y-koordinaatti.
+//   *   3: Napin teksti
+//   -   4: True/False, keskitetäänkö napin teksti, oletuksena ei keskitetä.
+// Palauttaa:
+//   - 1, jos hiiri on nappulan päällä
+//   - 2, jos hiiri on nappulan päällä ja tapahtui klikkaus
+//================================================================================
 Function Button(x,y,t$,center=0)
 	tmpW = 10 + TextWidth(t$)
 	tmpH = 10 + TextHeight(t$)
@@ -404,6 +432,14 @@ Function Button(x,y,t$,center=0)
 	Return hover + MouseHit(1)
 EndFunction
 
+//================================================================================
+// Funktio klikattavan tekstin piirtoa varten. Parametrit:
+//   * 1&2: Tekstin vasemman yläkulman x- ja y-koordinaatti
+//   *   3: Merkkijono, teksti itsessään.
+// Palauttaa:
+//   - 1, jos hiiri on nappulan päällä
+//   - 2, jos hiiri on nappulan päällä ja tapahtui klikkaus
+//================================================================================
 //Klikattava teksti
 Function ClickText(x,y,t$)
 	tmpW = TextWidth(t$)
@@ -425,4 +461,3 @@ Function ClickText(x,y,t$)
 	
 	Return hover + MouseHit(1)
 EndFunction
-	
