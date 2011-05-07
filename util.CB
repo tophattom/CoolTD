@@ -87,6 +87,8 @@ Type TOWER
 	Field special
 	Field upgrades
 	
+	Field price	//Myyntiä varten
+
 	Field id
 EndType
 

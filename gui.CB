@@ -32,7 +32,7 @@ Function BuildMenu(x,y)
 		tmpX = (x + 5)
 		tmpY = (y + 5) + i * (GRID_SIZE * 2.5)
 		
-		If gShowBuildMenu = True
+		If gShowBuildMenu = True And gMoney >= iType\price	//Tornin voi valita vain jos ON rahaa
 			If MouseX() > tmpX And MouseX() < (tmpX + GRID_SIZE) And MouseY() > tmpY And MouseY() < (tmpY + GRID_SIZE)
 				Color 128,0,0
 				Box tmpX,tmpY,GRID_SIZE,GRID_SIZE,0
@@ -49,8 +49,14 @@ Function BuildMenu(x,y)
 		tmpX2 = tmpX + (GRID_SIZE - TOWER_SIZE) / 2
 		tmpY2 = tmpY + (GRID_SIZE - TOWER_SIZE) / 2
 		
+		//Jos ON rahaa tornin väri, muuten harmaaksi
+		If gMoney >= iType\price
+			Color PeekByte(iType\clr,0),PeekByte(iType\clr,1),PeekByte(iType\clr,2)
+		Else
+			Color 20,20,20
+		EndIf
+		
 		//Tornin kuva
-		Color PeekByte(iType\clr,0),PeekByte(iType\clr,1),PeekByte(iType\clr,2)
 		Box tmpX2,tmpY2,TOWER_SIZE,TOWER_SIZE,0
 		Box tmpX2 + 3,tmpY2 + 3,TOWER_SIZE - 6,TOWER_SIZE - 6,1
 		
@@ -92,8 +98,7 @@ Function TowerInfo(towerId)
 	
 	tmpCount = CountUpgrades(tTower\id)
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
-		tmpH = tmpH + 29
-		sellOffset = sellOffset + 29
+		tmpW = 35 + TextWidth("Sell tower") + TextWidth("Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
 	EndIf
 	
 	tmpX = tTower\x * GRID_SIZE + GRID_SIZE
@@ -135,12 +140,27 @@ Function TowerInfo(towerId)
 	
 	//Myyntinapppi
 	Color 0,255,0
-	sell = Button(tmpX + 5,tmpY + tmpH - sellOffset,"Sell tower")
+	sell = Button(tmpX + 5,tmpY + tmpH - 29,"Sell tower")
+	
+	//Tornin myynti
+	If sell = 2
+		If tTower\level > 1
+			For i = 2 To tTower\level
+				gMoney = gMoney + Int(GetUpgradeProperty(tTower\id,i,UP_PRICE) * 0.6)
+			Next i
+		EndIf
+		
+		gMoney = gMoney + Int(tTower\price * 0.6)
+
+		Delete tTower
+		gSelectedTower = 0
+		Return 0
+	EndIf
 	
 	//Päivitysnappi
 	Color 0,255,0
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
-		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
+		tmp = Button(tmpX + 20 + TextWidth("Sell tower"),tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
 	
 		If tmp = 2
 			UpgradeTower(tTower\id,tTower\level + 1)

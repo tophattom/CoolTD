@@ -48,7 +48,7 @@ Function Run()
 		mX = RoundDown(MouseX() / GRID_SIZE)
 		mY = RoundDown(MouseY() / GRID_SIZE)
 		
-		If gPlaceTower = True
+		If gPlaceTower = True	//Tornin asettaminen
 			Color 128,0,0
 			Box mX * GRID_SIZE,mY * GRID_SIZE,GRID_SIZE,GRID_SIZE
 			
@@ -58,7 +58,7 @@ Function Run()
 				gPlaceTower = False
 				gSelectedTower = 0
 			EndIf
-		Else
+		Else	//Tornin valinta
 			If MouseHit(1) And GetTowerId(mX,mY) <> 0 And tmpHover = 0
 				gSelectedTower = GetTowerId(mX,mY)
 			ElseIf MouseHit(2)
@@ -66,9 +66,9 @@ Function Run()
 			EndIf
 		EndIf
 		
-		If KeyHit(cbKeyB)
+		If KeyHit(cbKeyB)	//Ostovalikon avaus
 			gShowBuildMenu = Not gShowBuildMenu
-		ElseIf KeyHit(cbKeySpace) And ((Timer() > gLastSpawn + WAIT_TIME) Or gEnemyAmount = 0)
+		ElseIf KeyHit(cbKeySpace) And ((Timer() > gLastSpawn + WAIT_TIME) Or gEnemyAmount = 0)	//Aallon l‰hetys
 			gLastSpawn = Timer()
 			
 			gSpawned = False
@@ -105,11 +105,12 @@ Function Run()
 			BuildMenu(0,0)
 		EndIf
 		
+		//N‰ytet‰‰n infolaatikko ja otetaan talteen tieto, onko hiiri sen p‰‰ll‰
 		If gSelectedTower <> 0 And gPlaceTower = False
 			tmpHover = TowerInfo(gSelectedTower)
 		Else
 			tmpHover = 0
-		endif
+		EndIf
 		
 		//Infoteksti
 		Color 0,Abs(Sin(Timer() / 9)) * 255,0

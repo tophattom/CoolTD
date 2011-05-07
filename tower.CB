@@ -150,6 +150,8 @@ Function CreateTower(x,y,typeId)
 			
 			nTower\level = 1
 			
+			nTower\price = tType\price
+			
 			nTower\id = ConvertToInteger(nTower)
 	EndIf
 EndFunction
