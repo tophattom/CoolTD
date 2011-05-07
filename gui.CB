@@ -1,4 +1,10 @@
-//Piirt‰‰ rakennuslaatiko
+//================================================================================
+// Rakennusvalikon piirto, parametreina valikon vasemman yl‰kulman x- ja y-koord.
+// Asettaa tornin valitsemisen yhteydess‰ tietoja kolmeen globaaliin muuttujaan:
+//   - gPlaceTower = True
+//   - gSelectedTower = Valitun tornin ID
+//   - gShowBuildMenu = False
+//================================================================================
 Function BuildMenu(x,y)
 	i = 0
 	maxWidth = 0
@@ -78,7 +84,9 @@ Function BuildMenu(x,y)
 	Next iType
 EndFunction
 
-//Piirt‰‰ tornin infolaatikon
+//================================================================================
+// Piirt‰‰ tornin infolaatikon tornin ID:n perusteella.
+//================================================================================
 Function TowerInfo(towerId)
 	tTower.TOWER = ConvertToType(towerId)
 
@@ -140,7 +148,9 @@ Function TowerInfo(towerId)
 	EndIf
 EndFunction
 
-//P‰‰valikko
+//================================================================================
+// P‰‰valikon piirto ja muu toiminnallisuus.
+//================================================================================
 Function MainMenu()
 	Repeat		
 		DrawGrid()
@@ -175,7 +185,10 @@ Function MainMenu()
 	Forever
 EndFunction	
 
-//Piirt‰‰ pausevalikon
+//================================================================================
+// Pausevalikon piirto. Palauttaa True, jos halutaan jatkaa peli‰, False jos
+// peli halutaan pist‰‰ poikki.
+//================================================================================
 Function PauseMenu()
 	//Tallennetaan nykyinen tilanne kuvaan
 	tmpImg = MakeImage(gScreenW,gScreenH)
@@ -206,7 +219,8 @@ Function PauseMenu()
 			If tmp = 2
 				Select i
 					Case 0
-						gLoopStart = Timer()
+						// Alustetaan FPS-riippumattomuuden ajastin
+						gLoopStart = Timer() 
 						Return True
 					Case 1
 						SettingsMenu()
@@ -223,7 +237,10 @@ Function PauseMenu()
 	Return true
 EndFunction
 
-//Asetusvalikko
+//================================================================================
+// Valikon osa, asetukset. Ei palauta mit‰‰n arvoa. Sopii kutsuttavaksi myˆs
+// kesken pelin, kuten yll‰ olevassa PauseMenu-funktiossa tehd‰‰nkin.
+//================================================================================
 Function SettingsMenu()
 	//Tallennetaan nykyinen tilanne kuvaan
 	tmpImg = MakeImage(gScreenW,gScreenH)
@@ -285,7 +302,9 @@ Function SettingsMenu()
 	SaveSettings()
 EndFunction
 
-//Kent‰nvalintaruutu
+//================================================================================
+// Valikon osa, kent‰nvalintaruutu. Ei palauta mit‰‰n arvoa.
+//================================================================================
 Function LevelMenu()
 	ClearMouse
 	
@@ -336,7 +355,15 @@ Function LevelMenu()
 	Until KeyHit(cbKeyEsc)
 EndFunction
 
-//Piirt‰‰ napin
+//================================================================================
+// Funktio napin piirt‰mist‰ varten. Parametrit:
+//   * 1&2: Napin vasemman yl‰kulman x- ja y-koordinaatti.
+//   *   3: Napin teksti
+//   -   4: True/False, keskitet‰‰nkˆ napin teksti, oletuksena ei keskitet‰.
+// Palauttaa:
+//   - 1, jos hiiri on nappulan p‰‰ll‰
+//   - 2, jos hiiri on nappulan p‰‰ll‰ ja tapahtui klikkaus
+//================================================================================
 Function Button(x,y,t$,center=0)
 	tmpW = 10 + TextWidth(t$)
 	tmpH = 10 + TextHeight(t$)
@@ -369,6 +396,14 @@ Function Button(x,y,t$,center=0)
 	Return hover + MouseHit(1)
 EndFunction
 
+//================================================================================
+// Funktio klikattavan tekstin piirtoa varten. Parametrit:
+//   * 1&2: Tekstin vasemman yl‰kulman x- ja y-koordinaatti
+//   *   3: Merkkijono, teksti itsess‰‰n.
+// Palauttaa:
+//   - 1, jos hiiri on nappulan p‰‰ll‰
+//   - 2, jos hiiri on nappulan p‰‰ll‰ ja tapahtui klikkaus
+//================================================================================
 //Klikattava teksti
 Function ClickText(x,y,t$)
 	tmpW = TextWidth(t$)
