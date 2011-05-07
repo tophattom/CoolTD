@@ -109,7 +109,7 @@ Function DrawPath()
 			Color 64,80,64
 			Box currentX * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
 		ElseIf currentWaypoint = gWaypointAmount	//Loppu
-			Color 80,64,64
+			Color 128,64,64
 			Box currentX * GRID_SIZE,currentY * GRID_SIZE,GRID_SIZE,GRID_SIZE
 		Else
 			Color cbDark
