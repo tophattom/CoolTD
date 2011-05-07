@@ -91,7 +91,8 @@ Function TowerInfo(towerId)
 	tTower.TOWER = ConvertToType(towerId)
 
 	tmpW = TextWidth("Bullet speed: " + tTower\sSpeed) + 10
-	tmpH = 58
+	tmpH = 87
+	sellOffset = 29
 	
 	If tTower\special <> 0
 		tmpH = tmpH + (MEMBlockSize(tTower\special) / 2) * 12
@@ -100,6 +101,7 @@ Function TowerInfo(towerId)
 	tmpCount = CountUpgrades(tTower\id)
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
 		tmpH = tmpH + 29
+		sellOffset = sellOffset + 29
 	EndIf
 	
 	tmpX = tTower\x * GRID_SIZE + GRID_SIZE
@@ -139,12 +141,24 @@ Function TowerInfo(towerId)
 		Next k
 	EndIf
 	
+	//Myyntinapppi
+	Color 0,255,0
+	sell = Button(tmpX + 5,tmpY + tmpH - sellOffset,"Sell tower")
+	
+	//Päivitysnappi
+	Color 0,255,0
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
 		tmp = Button(tmpX + 5,tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
 	
 		If tmp = 2
 			UpgradeTower(tTower\id,tTower\level + 1)
 		EndIf
+	EndIf
+
+	If MouseX() > tmpX And MouseX() < (tmpX + tmpW) And MouseY() > tmpY And MouseY() < (tmpY + tmpH)
+		Return 1
+	Else
+		Return 0
 	EndIf
 EndFunction
 
@@ -348,6 +362,7 @@ Function LevelMenu()
 			InitGame()
 			Run()
 		ElseIf back = 2
+			ClearMouse
 			Exit
 		EndIf
 		
