@@ -1,5 +1,13 @@
 //Alustaa pelin ja lataa kaiken tarvittavan
 Function InitGame()
+	
+	// Tyhjennetään mahdolliset olemassa olevat pelioliot jo nyt.
+	ClearTowers()
+	ClearSpawn()
+	ClearEnemies()
+	ClearBullets()
+	ClearParticles()
+
 	If FileExists("data/settings.dat")
 		LoadSettings()
 	Else
@@ -24,12 +32,6 @@ Function InitGame()
 	
 	gMoney = 300
 	gLives = 20
-	
-	ClearTowers()
-	ClearSpawn()
-	ClearEnemies()
-	ClearBullets()
-	ClearParticles()
 	
 	gShowBuildMenu = False
 	gSelectedTower = 0
@@ -75,11 +77,7 @@ Function Run()
 			gCurrentWave = gCurrentWave + 1
 			
 			If gCurrentWave > gWaveAmount
-				ClearTowers()
-				ClearSpawn()
-				ClearEnemies()
 				ClearPath()
-				
 				Return EXIT_SUCCESS
 			EndIf
 		EndIf
@@ -127,6 +125,7 @@ Function Run()
 			tmp = PauseMenu()
 			
 			If tmp = False
+				ClearPath()
 				Return EXIT_INTERRUPT
 			EndIf
 		EndIf
