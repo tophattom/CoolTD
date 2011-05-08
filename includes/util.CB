@@ -239,6 +239,8 @@ Global gTowerTypeAmount	//Tornityyppien lukum‰‰r‰
 Global gWaypointAmount	//Waypointtien m‰‰r‰
 	gWaypointAmount = 0
 	
+Global gPathImg			//Kuva johon kartta piirret‰‰n
+	
 Global gGroupAmount		//Vihollisryhmien m‰‰r‰
 Global gCurrentGroup	//Nykyinen ryhm‰
 	gCurrentGroup = 1

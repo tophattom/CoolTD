@@ -36,6 +36,9 @@ Function InitGame()
 	gSelectedTower = 0
 	gPlaceTower = False
 	
+	//Piirret‰‰n kentt‰ kuvaan
+	DrawPath(1)
+	
 	ClearMouse
 EndFunction 
 
@@ -87,7 +90,7 @@ Function Run()
 		UpdateBullets()
 		
 		DrawGrid()
-		DrawPath()
+		DrawImage gPathImg,0,0
 		DrawEnemies()
 		DrawTowers()
 		DrawBullets()

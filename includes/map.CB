@@ -89,7 +89,12 @@ Function DrawPathCorner(x,y,corner)
 EndFunction
 
 //Piirt‰‰ reitin
-Function DrawPath()
+Function DrawPath(img=0)
+	If img = 1
+		gPathImg = MakeImage(gScreenW,gScreenH)
+		DrawToImage gPathImg
+	EndIf
+	
 	For currentWaypoint = 1 To gWaypointAmount
 		prevWaypoint = Max(1,currentWaypoint - 1)
 		nextWaypoint = Min(gWaypointAmount,currentWaypoint + 1)
@@ -179,6 +184,10 @@ Function DrawPath()
 			Next i
 		EndIf
 	Next currentWaypoint
+	
+	If img = 1
+		DrawToScreen
+	EndIf
 EndFunction
 
 //Tarkistaa onko tile tyhj‰
@@ -251,6 +260,11 @@ Function ClearPath()
 	
 	gWaypointAmount = 0
 	ReDim gWaypoints(gWaypointAmount + 1,WP_PROPERTIES - 1)
+	
+	If gPathImg <> 0
+		DeleteImage gPathImg
+		gPathImg = 0
+	endif
 EndFunction
 
 //Tallentaa reitin tiedostoon
