@@ -1,13 +1,13 @@
-Include "util.cb"
-Include "map.cb"
-Include "tower.cb"
-Include "enemy.cb"
-Include "bullet.cb"
-Include "editor.cb"
-Include "gui.cb"
-Include "game.cb"
-Include "particle.cb"
-Include "sound.cb"
+Include "includes/util.CB"
+Include "includes/map.CB"
+Include "includes/tower.CB"
+Include "includes/enemy.CB"
+Include "includes/bullet.CB"
+Include "includes/editor.CB"
+Include "includes/gui.CB"
+Include "includes/game.CB"
+Include "includes/particle.CB"
+Include "includes/sound.CB"
 
 SAFEEXIT OFF
 
