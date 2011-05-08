@@ -106,6 +106,7 @@ Type BULLET
 	Field clr
 	
 	Field special
+	Field targetId	//Ohjautuvia ammuksia varten
 EndType
 
 //Spawnausjono
@@ -184,6 +185,7 @@ Const SPECIAL_SPLIT = 2		//Hajoava vihollinen
 Const SPECIAL_FREEZE = 3	//J‰‰dytt‰v‰ torni
 Const SPECIAL_FIRE = 4		//Sytytt‰v‰ torni
 Const SPECIAL_TRANSFORM = 5	//Muuttuva vihollinen
+Const SPECIAL_GUIDED = 6	//Ohjautuvar ammukset
 
 //Kuinka tihe‰sti vihollisia luodaan
 Const SPAWN_INTERVAL = 500

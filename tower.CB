@@ -53,6 +53,8 @@ Function LoadTowerData(file$)
 										Case "fire"
 											PokeByte nType\special,i * 2,SPECIAL_FIRE
 											PokeByte nType\special,i * 2 + 1,Int(GetWord(tmpV$,2,":"))
+										Case "guided"
+											PokeByte nType\special,i * 2,SPECIAL_GUIDED
 									EndSelect
 								Next i
 							Case "[upgrade]"
@@ -170,7 +172,9 @@ EndFunction
 Function UpdateTowers()
 	For iTower.TOWER = Each TOWER
 		//Onko ilmatorni
-		tAir = IsAirTower(iTower\id)
+		tAir = CheckSpecial(iTower\id,SPECIAL_AIR)
+		//Onko ohjautuva torni
+		tGuided = CheckSpecial(iTower\id,SPECIAL_GUIDED)
 		
 		tmpX = iTower\x * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2
 		tmpY = iTower\y * GRID_SIZE + (GRID_SIZE - TOWER_SIZE) / 2	
@@ -194,7 +198,13 @@ Function UpdateTowers()
 				iTower\cannonAng = GetAngle(tmpX,tmpY,tEnemy\x,tEnemy\y)
 				
 				If Timer() > iTower\lastShot + iTower\sSpeed
-					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr,iTower\special)
+					If tGuided = True
+						target = iTower\targetId
+					Else
+						target = 0
+					EndIf
+					
+					CreateBullet(tmpX + TOWER_SIZE / 2,tmpY + TOWER_SIZE / 2,iTower\cannonAng,iTower\bSpeed,iTower\damage,iTower\clr,iTower\special,target)
 					
 					PlaySound2(SND_SHOOT)
 					
@@ -249,13 +259,13 @@ Function PrintTowerInfo()
 	Next iType
 EndFunction
 
-//Tarkistaa ampuuko torni ilmaan
-Function IsAirTower(towerId)
+//Tarkistaa löytyykö tornilta tietty erikoisominaisuus
+Function CheckSpecial(towerId,sp)
 	tTower.TOWER = ConvertToType(towerId)
 	
 	If tTower\special <> 0
 		For i = 0 To MEMBlockSize(tTower\special) - 2 Step 2
-			If PeekByte(tTower\special,i) = SPECIAL_AIR
+			If PeekByte(tTower\special,i) = sp
 				Return True
 			EndIf
 		Next i

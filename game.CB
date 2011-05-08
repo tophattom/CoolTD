@@ -1,6 +1,5 @@
 //Alustaa pelin ja lataa kaiken tarvittavan
 Function InitGame()
-	
 	// Tyhjennet‰‰n mahdolliset olemassa olevat pelioliot jo nyt.
 	ClearTowers()
 	ClearSpawn()

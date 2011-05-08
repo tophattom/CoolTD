@@ -83,6 +83,8 @@ Function BuildMenu(x,y)
 					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Stops enemy"
 				ElseIf tmpSpecial = SPECIAL_FIRE
 					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Ignites"
+				ElseIf tmpSpecial = SPECIAL_GUIDED
+					Text tmpX + GRID_SIZE,tmpY + 48 + 12 * (k / 2),"Guided"
 				EndIf
 			Next k
 		EndIf
@@ -143,12 +145,14 @@ Function TowerInfo(towerId)
 				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Stops enemy"
 			ElseIf tmpSpecial = SPECIAL_FIRE
 				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Ignites"
+			ElseIf tmpSpecial = SPECIAL_GUIDED
+				Text tmpX + 5,tmpY + 53 + 12 * (k / 2),"Guided"
 			EndIf
 		Next k
 	EndIf
 	
 	//Myyntinapppi
-	Color 0,255,0
+	Color PeekByte(tTower\clr,0),PeekByte(tTower\clr,1),PeekByte(tTower\clr,2)
 	sell = Button(tmpX + 5,tmpY + tmpH - 29,"Sell tower")
 	
 	//Tornin myynti
@@ -167,9 +171,17 @@ Function TowerInfo(towerId)
 	EndIf
 	
 	//Päivitysnappi
-	Color 0,255,0
+	Color PeekByte(tTower\clr,0),PeekByte(tTower\clr,1),PeekByte(tTower\clr,2)
 	If tmpCount > 0 And (tTower\level - 1) < tmpCount
-		tmp = Button(tmpX + 20 + TextWidth("Sell tower"),tmpY + tmpH - 29,"Upgrade (" + GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE) + ")")
+		tmpPrice = GetUpgradeProperty(tTower\id,tTower\level + 1,UP_PRICE)
+		
+		If tmpPrice > gMoney
+			active = False
+		Else
+			active = True
+		EndIf
+		
+		tmp = Button(tmpX + 20 + TextWidth("Sell tower"),tmpY + tmpH - 29,"Upgrade (" + tmpPrice + ")",0,active)
 	
 		If tmp = 2
 			UpgradeTower(tTower\id,tTower\level + 1)
@@ -396,11 +408,12 @@ EndFunction
 //   * 1&2: Napin vasemman yläkulman x- ja y-koordinaatti.
 //   *   3: Napin teksti
 //   -   4: True/False, keskitetäänkö napin teksti, oletuksena ei keskitetä.
+//	 -	 5: True/False, onko nappi aktiivinen, oletuksena aktiivinen
 // Palauttaa:
 //   - 1, jos hiiri on nappulan päällä
 //   - 2, jos hiiri on nappulan päällä ja tapahtui klikkaus
 //================================================================================
-Function Button(x,y,t$,center=0)
+Function Button(x,y,t$,center=0,active=1)
 	tmpW = 10 + TextWidth(t$)
 	tmpH = 10 + TextHeight(t$)
 	
@@ -410,21 +423,31 @@ Function Button(x,y,t$,center=0)
 		tmpX = x
 	EndIf
 	
-	r = getRGB(RED)
-	g = getRGB(GREEN)
-	b = getRGB(BLUE)
+	If active = 1
+		r = getRGB(RED)
+		g = getRGB(GREEN)
+		b = getRGB(BLUE)
+	Else
+		r = 20
+		g = 20
+		b = 20
+	EndIf
 	
 	//Pohjalaatikko
 	Color cbBlack
 	Box tmpX,y,tmpW,tmpH,1
 
-	If MouseX() > tmpX And MouseX() < (tmpX + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
-		Color r / 2,g / 2,b / 2
-		hover = True
+	If active = 1
+		If MouseX() > tmpX And MouseX() < (tmpX + tmpW) And MouseY() > y And MouseY() < (y + tmpH)
+			Color r / 2,g / 2,b / 2
+			hover = True
+		Else
+			Color r,g,b
+			hover = False
+		EndIf
 	Else
 		Color r,g,b
-		hover = False
-	EndIf
+	endif
 	
 	Box tmpX,y,tmpW,tmpH,0
 	Text tmpX + 5,y + 5,t$

@@ -1,5 +1,5 @@
 //Luo uuden ammuksen
-Function CreateBullet(x,y,ang,speed,damage,clr,special)
+Function CreateBullet(x,y,ang,speed,damage,clr,special,target=0)
 	nBullet.BULLET = New(BULLET)
 		nBullet\x = x
 		nBullet\y = y
@@ -12,12 +12,20 @@ Function CreateBullet(x,y,ang,speed,damage,clr,special)
 		nBullet\clr = clr
 		
 		nBullet\special = special
+		nBullet\targetId = target
 EndFunction
 
 //P‰ivitt‰‰ ammukset
 Function UpdateBullets()
 	For iBullet.BULLET = Each BULLET
 		bAir = False
+		
+		//Jos ammukselle ON annettu kohde, se ON ohjautuva ammus
+		If iBullet\targetId <> 0 And IsAlive(iBullet\targetId)
+			tEnemy.ENEMY = ConvertToType(iBullet\targetId)
+			
+			iBullet\ang = GetAngle(iBullet\x,iBullet\y,tEnemy\x,tEnemy\y)
+		EndIf
 		
 		iBullet\x = iBullet\x + Cos(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
 		iBullet\y = iBullet\y - Sin(iBullet\ang) * iBullet\speed * (gLoopTime / 1000)
@@ -127,4 +135,4 @@ Function ClearBullets()
 	For iBullet.BULLET = Each BULLET
 		Delete iBullet
 	Next iBullet
-endfunction
+EndFunction
