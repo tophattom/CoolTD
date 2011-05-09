@@ -229,6 +229,39 @@ Function UpdateEnemies()
 			EndIf
 			
 			If iEnemy\hp <= 0
+				//Tarkistetaan onko vihollisessa erikoisominaisuuksia
+				If iEnemy\special <> 0
+					For i = 0 To MEMBlockSize(iEnemy\special) - 2 Step 2
+						tmpSpecial = PeekByte(iEnemy\special,i)
+														
+						If tmpSpecial = SPECIAL_SPLIT //Vihollisen jakautuminen
+							If iEnemy\dir = DIR_UP
+								deltaX = 0
+								deltaY = 15
+							ElseIf iEnemy\dir = DIR_DOWN
+								deltaX = 0
+								deltaY = -15
+							ElseIf iEnemy\dir = DIR_LEFT
+								deltaX = 15
+								deltaY = 0
+							ElseIf iEnemy\dir = DIR_RIGHT
+								deltaX = -15
+								deltaY = 0
+							EndIf
+									
+							typeNum = PeekByte(iEnemy\special,i + 1)
+								
+							CreateEnemy2(iEnemy\x + deltaX,iEnemy\y + deltaY,iEnemy\dir,iEnemy\nextWaypoint,GetEnemyTypeId(typeNum))
+							CreateEnemy2(iEnemy\x + 2 * deltaX,iEnemy\y +  2 * deltaY,iEnemy\dir,iEnemy\nextWaypoint,GetEnemyTypeId(typeNum))
+									
+							gEnemyAmount = gEnemyAmount + 2
+						ElseIf tmpSpecial = SPECIAL_TRANSFORM //Vihollisen muuttuminen
+							CreateEnemy2(iEnemy\x,iEnemy\y,iEnemy\dir,iEnemy\nextWaypoint,GetEnemyTypeId(PeekByte(iEnemy\special,i + 1)))
+							gEnemyAmount = gEnemyAmount + 1
+						EndIf
+					Next i
+				EndIf
+						
 				Delete iEnemy
 				gEnemyAmount = gEnemyAmount - 1
 			EndIf
